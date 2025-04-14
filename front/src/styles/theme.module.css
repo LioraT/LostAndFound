@@ -1,0 +1,769 @@
+/* theme.module.css */
+.layoutGrid {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "header header"
+      "menu main"
+      "footer footer";
+    height: 100vh;
+    font-family: sans-serif;
+  }
+  
+  .layoutHeader {
+    grid-area: header;
+    background-color: #343a40;
+    color: white;
+    padding: 1rem;
+  }
+  
+  .layoutMenu {
+    grid-area: menu;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+  }
+  
+  .layoutMain {
+    grid-area: main;
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+  
+  .layoutFooter {
+    grid-area: footer;
+    background-color: #D0D1CF;
+    color: #1f2123;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+  
+  .footerContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  
+  .footerLogo {
+    height: 50px;
+  }
+  
+  .footerQuote h2,
+  .footerQuote h3 {
+    margin: 0;
+    font-weight: normal;
+  }
+
+  /*Dashboard*/
+  .dashboardContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+  }
+  
+  .dashboardWelcome {
+    font-size: 1.2rem;
+    color: #ffffff;
+    margin: 0;
+  }
+  
+  .dashboardButton {
+    background-color: #dc3545;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .dashboardLink {
+    color: #ffc107;
+    text-decoration: underline;
+    font-weight: bold;
+  }
+
+  /*side Bar*/
+
+  .sidebar {
+    width: 160px;
+    background: #f0f0f0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebarLink {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    gap: 10px;
+  }
+  
+  .sidebarLink:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .sidebarLinkActive {
+    background-color: #d0d0d0;
+    font-weight: bold;
+  }
+  
+  .sidebarIcon {
+    font-size: 20px;
+  }
+  
+  .sidebarLabel {
+    white-space: nowrap;
+  }
+/* about */
+.homeContainer {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .homeContainer h1 {
+    font-size: 2rem;
+    color: #444;
+  }
+  
+  .homeVideo {
+    max-width: 100%;
+    height: auto;
+    margin-top: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }  
+  
+/*general*/
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+  }
+  
+  .button {
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  
+  .buttonPrimary {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .buttonDanger {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  /*add point*/
+
+  .formContainer {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    min-width: 250px;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .input {
+    padding: 8px;
+    margin: 10px 0;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .ok {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .cancel {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  /* add product */
+
+  .addProductContainer {
+    max-width: 600px;
+    margin: 80px auto;
+    text-align: center;
+  }
+  
+  .addProductForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .addProductInput {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .addProductCheckbox {
+    text-align: left;
+    padding: 10px;
+  }
+  
+  .addProductButton {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .addProductError {
+    color: red;
+  }
+  
+  .addProductSuccess {
+    color: green;
+  }
+/* change password */
+
+.changePasswordContainer {
+    max-width: 400px;
+    margin: 80px auto;
+    text-align: center;
+  }
+  
+  .changePasswordForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .changePasswordInput {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .changePasswordButton {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .changePasswordSuccess {
+    color: green;
+  }
+  
+  .changePasswordError {
+    color: red;
+  }
+/* edit product */
+
+.editProductContainer {
+    max-width: 600px;
+    margin: 50px auto;
+    text-align: center;
+  }
+  
+  .editProductForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .editProductInput {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .editProductButton {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .editProductDeleteButton {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .editProductSuccess {
+    color: green;
+  }
+  
+  .editProductError {
+    color: red;
+  }
+
+  /*edit user*/
+
+  .editUserContainer {
+    max-width: 500px;
+    margin: 60px auto;
+    text-align: center;
+  }
+  
+  .editUserForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .editUserInput {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .editUserButton {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .editUserDeleteButton {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .editUserSuccess {
+    color: green;
+  }
+  
+  .editUserError {
+    color: red;
+  }
+/*home*/
+.homeContainer {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .homeContainer h1 {
+    font-size: 2.2rem;
+    color: #444;
+    margin-bottom: 1rem;
+  }
+  
+  .homeVideo {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+/* login */
+.loginContainer {
+    max-width: 400px;
+    margin: 80px auto;
+    text-align: center;
+  }
+  
+  .loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .loginInput {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .loginButtonRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .loginButton {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    flex: 1;
+  }
+  
+  .loginButtonSecondary {
+    background-color: #6c757d;
+  }
+  
+  .loginError {
+    color: red;
+    margin-top: 1rem;
+  }
+  .mapWrapper {
+    position: relative;
+  }
+  
+  .mapMessage {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+  }
+  
+  .mapLoading {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 6px 15px;
+    border-radius: 6px;
+    z-index: 1000;
+    font-style: italic;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+/*not found */
+.notFoundContainer {
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .notFoundContainer h2 {
+    font-size: 2rem;
+    color: #dc3545;
+    margin-bottom: 1rem;
+  }
+  
+  .notFoundContainer p {
+    font-size: 1.1rem;
+    color: #555;
+  }
+  .notFoundButton {
+    margin-top: 1.5rem;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .notFoundButton:hover {
+    background-color: #0056b3;
+  }
+
+  /*propile*/
+  .profileContainer {
+    max-width: 500px;
+    margin: 60px auto;
+    text-align: left;
+  }
+  
+  .profileForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .profileInput {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .profileField {
+    margin-bottom: 8px;
+  }
+  
+  .profileButtonRow {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .profileButton {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .profileSuccess {
+    color: green;
+  }
+  
+  .profileError {
+    color: red;
+  }
+/*register*/
+.registerContainer {
+    max-width: 450px;
+    margin: 80px auto;
+    text-align: center;
+  }
+  
+  .registerForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .registerInput {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .registerButton {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .registerError {
+    color: red;
+    margin-top: 1rem;
+  }
+/*product search*/
+.productSearchContainer {
+    max-width: 600px;
+    margin: 50px auto;
+    text-align: left;
+  }
+  
+  .productSearchControls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .productSearchInput {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .productSearchButton {
+    padding: 10px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .productSearchError {
+    color: red;
+    margin-bottom: 1rem;
+  }
+  
+  .productSearchTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .productSearchTable th,
+  .productSearchTable td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+  
+  .productRow {
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
+  
+  .productRow:hover {
+    background-color: #e8f0fe;
+  }
+  
+  .productPagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .paginationButton {
+    padding: 8px 14px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    background-color: #6c757d;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .paginationButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+/*user search*/
+.userSearchContainer {
+    max-width: 700px;
+    margin: 50px auto;
+    text-align: left;
+  }
+  
+  .userSearchInputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .userSearchInput {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .userSearchButton {
+    padding: 10px 16px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .userSearchError {
+    color: red;
+    margin-bottom: 1rem;
+  }
+  
+  .userSearchTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .userSearchTable th,
+  .userSearchTable td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+  
+  .userRow {
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
+  
+  .userRow:hover {
+    background-color: #eef3ff;
+  }
+  
+  .userPagination {
+    display: flex;
+    justify-content: space-between;
+    max-width: 700px;
+    margin: 20px auto;
+  }
+  
+  .userPagination button {
+    padding: 8px 14px;
+    font-size: 14px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .userPagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+
+      
