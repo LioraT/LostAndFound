@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import styles from "../styles/theme.module.css";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import api from '../services/axios';
 
 export default function Profile() {
   const [user, setUser] = useState(null);
@@ -17,20 +16,8 @@ export default function Profile() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      if (!token) {
-        navigate(`/login`);
-        return;
-      }
-
       try {
-        const res = await fetch(`${API_URL}/protected/profile`, {
-          headers: { Authorization: token },
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) throw new Error(data.error || "Failed to load profile");
-
+        const { data } = await api.get('/protected/profile');
         setUser(data);
         setFormData({
           first_name: data.first_name || "",
@@ -41,7 +28,7 @@ export default function Profile() {
         });
       } catch (err) {
         console.error("Profile load error:", err);
-        setError(err.message);
+        setError(err.response?.data?.error || err.message);
       }
     };
 
@@ -61,37 +48,21 @@ export default function Profile() {
     setError("");
     setMessage("");
 
-    if (!token) {
-      navigate(`/login`);
-      return;
-    }
-
     try {
-      const res = await fetch(`${API_URL}/protected/users/me`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          first_name: formData.first_name,
-          family_name: formData.family_name,
-          email: formData.email,
-          date_of_birth: formData.date_of_birth,
-          preferences: { page_size: formData.page_size },
-        }),
+      const { data } = await api.put('/protected/users/me', {
+        first_name: formData.first_name,
+        family_name: formData.family_name,
+        email: formData.email,
+        date_of_birth: formData.date_of_birth,
+        preferences: { page_size: formData.page_size },
       });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.error || "Failed to update profile");
 
       setUser(data.user);
       setMessage("Profile updated successfully.");
       setEditing(false);
     } catch (err) {
       console.error("Update error:", err);
-      setError(err.message);
+      setError(err.response?.data?.error || err.message);
     }
   };
 

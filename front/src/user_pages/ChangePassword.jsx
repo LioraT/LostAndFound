@@ -4,8 +4,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import styles from "../styles/theme.module.css";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import api from "../services/axios"; //axios instance
 
 export default function ChangePassword() {
   const navigate = useNavigate();
@@ -20,36 +19,19 @@ export default function ChangePassword() {
     e.preventDefault();
     setError("");
     setMessage("");
-    if (!token) {
-      navigate(`/login`);
-      return;
-    }
+    
     try {
-      const res = await fetch(`${API_URL}/protected/users/me/password`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          current_password: currentPassword,
-          new_password: newPassword,
-        }),
+      await api.put('/protected/users/me/password', {
+        current_password: currentPassword,
+        new_password: newPassword,
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Failed to change password.");
-        return;
-      }
 
       setMessage("Password updated successfully.");
       setCurrentPassword("");
       setNewPassword("");
     } catch (err) {
       console.error("Password change error:", err);
-      setError("An error occurred while changing password.");
+      setError(err.response?.data?.error || "Failed to change password.");
     }
   };
 

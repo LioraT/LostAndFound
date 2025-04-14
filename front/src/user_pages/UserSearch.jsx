@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getUserPageSize } from "../utils/user";
 import styles from "../styles/theme.module.css";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import api from '../services/axios';
 
 export default function UserSearch() {
   const [query, setQuery] = useState("");
@@ -14,13 +13,12 @@ export default function UserSearch() {
   const [pageSize, setPageSize] = useState(5);
   const [error, setError] = useState("");
 
-  const { token } = useAuth();
   const navigate = useNavigate();
   
 
   useEffect(() => {
     const loadPageSize = async () => {
-      const size = await getUserPageSize(token);
+      const size = await getUserPageSize();
       setPageSize(size);
     };
     loadPageSize();
@@ -29,34 +27,21 @@ export default function UserSearch() {
   const handleSearch = async (page = 0) => {
     setError("");
     
-    if (!token) {
-      navigate(`/login`);
-      return;
-    }
-
     try {
-      const res = await fetch(
-        `${API_URL}/protected/users?search=${encodeURIComponent(query)}&limit=${pageSize}&skip=${page * pageSize}`,
-        {
-          headers: {
-            Authorization: token,
-          },
+      const { data } = await api.get('/protected/users', {
+        params: {
+          search: query,
+          limit: pageSize,
+          skip: page * pageSize
         }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Search failed.");
-        return;
-      }
+      });
 
       setResults(data.users || []);
       setTotal(data.total || 0);
       setCurrentPage(page);
     } catch (err) {
       console.error(err);
-      setError("Something went wrong.");
+      setError(err.response?.data?.error || "Search failed.");
     }
   };
 

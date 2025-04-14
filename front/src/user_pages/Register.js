@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; 
 import styles from "../styles/theme.module.css";
-
-
-const API_URL = process.env.REACT_APP_API_URL;
+import api from '../services/axios';
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -22,58 +20,39 @@ export default function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
-  
-    const result = await signup({
-      username,
-      password,
-      first_name: firstName,
-      family_name: familyName,
-      email,
-      date_of_birth: dateOfBirth,
-      preferences: { page_size: pageSize },
-    });
-  
-    if (result.success) {
-      navigate("/about"); // or go to dashboard directly
-    } else {
-      setError(result.error || "Registration failed");
-    }
-  };
-
-/*
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setError("");
 
     try {
-      const res = await fetch(`${API_URL}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username,
-          password,
-          first_name: firstName,
-          family_name: familyName,
-          email,
-          date_of_birth: dateOfBirth,
-          preferences: { page_size: pageSize },
-        }),
+      await api.post('/auth/register', {
+        username,
+        password,
+        first_name: firstName,
+        family_name: familyName,
+        email,
+        date_of_birth: dateOfBirth,
+        preferences: { page_size: pageSize },
       });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Registration successful! Please log in.");
-        navigate("/login");
+      
+      // Auto-login after successful registration
+      const result = await signup({
+        username,
+        password,
+        first_name: firstName,
+        family_name: familyName,
+        email,
+        date_of_birth: dateOfBirth,
+        preferences: { page_size: pageSize },
+      });
+      
+      if (result.success) {
+        navigate("/about");
       } else {
-        setError(data.error || "Registration failed");
+        setError(result.error || "Registration failed");
       }
     } catch (err) {
-      console.error(err);
-      setError("Something went wrong.");
+      console.error("Registration error:", err);
+      setError(err.response?.data?.error || "Registration failed");
     }
   };
-*/
 
   return (
     <div className={styles.registerContainer}>

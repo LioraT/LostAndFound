@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../services/axios';
+//1. The api uses the base URL from the .env file, 
+//2.  Adds the token to the request header
+//3.  Handles the response and error
 
 // Create a context for authentication that will be used throughout the app
 const AuthContext = createContext(null);
-
-const API_URL = process.env.REACT_APP_API_URL;
 
 export const AuthProvider = ({ children }) => {
   // Core authentication state
@@ -30,23 +32,19 @@ export const AuthProvider = ({ children }) => {
     
   // Handle user sign in
   // 1. Authenticate with credentials
-  // 2. Fetch complete user profile including preferences
+  // 2. The axios api will fetch complete user profile including preferences
   // 3. Store auth data in localStorage and state
+
   const handleSignIn = async (username, password) => {
     try {
       // Step 1: Authenticate user
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
+      const { data } = await api.post('/auth/login', {
+        username,
+        password,
       });
 
-      const data = await response.json();
-      
-      if (!response.ok || !data.token) {
-        throw new Error(data.error || 'Login in failed');
+      if (!data.token) {
+        throw new Error('Login failed');
       }
 
       // Step 2: Store authentication data
@@ -61,7 +59,7 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('Login error:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: error.response?.data?.error || error.message }; //returns detailed error if exist
     }
   };
 
@@ -71,31 +69,15 @@ export const AuthProvider = ({ children }) => {
   
     const checkUserStatus = async () => {
       try {
-        const response = await fetch(`${API_URL}/protected/`, {
-          headers: {
-            Authorization: token, // not Bearer
-          },
-        });
-  
-        if (response.status === 401) {
+        await api.get('/protected/');
+      } catch (err) {
+        if (err.response?.status === 401) {
           console.warn("Token expired or unauthorized, signing out.");
           handleSignOut();
-          return;
-        }
-  
-        // You can optionally parse response here if needed:
-        /*  
-        const userData = await response.json();
-        // If user status is deactivated
-        if (userData.status === false) {
-          console.warn("User is deactivated, signing out.");
+        } else {
+          console.error("Error validating token:", err);
           handleSignOut();
         }
-       */
-        
-      } catch (err) {
-        console.error("Error validating token:", err);
-        handleSignOut(); // optional: auto sign out on error
       }
     };
   
@@ -120,20 +102,8 @@ export const AuthProvider = ({ children }) => {
   // 2. Automatically sign in the new user
   const handleSignUp = async (userData) => {
     try {
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        throw new Error(data.error || "Registration failed");
-      }
-  
+      await api.post('/auth/register', userData);
+      
       // Auto-login after successful registration
       const loginResult = await handleSignIn(userData.username, userData.password);
   
@@ -144,7 +114,7 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error("Sign up error:", error);
-      return { success: false, error: error.message };
+      return { success: false, error: error.response?.data?.error || error.message  };
     }
   };
   
