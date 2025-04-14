@@ -1,0 +1,7 @@
+PORT=5000
+# MONGODB_URI='mongodb://127.0.0.1:27017/lostnfound'
+MONGODB_URI='mongodb+srv://mongo123:mongomongo7@cluster0.98yjd.mongodb.net/lostnfound'
+# this is how to create the secret in case we want to change:
+#node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+JWT_SECRET='f211aeb62e6c03f3280a5bfc3fa52ddb2a3fb22539bedd41aa78a59745ddc39c'
+
