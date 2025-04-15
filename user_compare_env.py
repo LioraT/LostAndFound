@@ -1,16 +1,23 @@
 import hashlib
 import os
+import argparse
 
-# Define file pairs to compare
+# === Parse Command Line Argument for Username ===
+parser = argparse.ArgumentParser(description="Compare MD5 checksums of file pairs.")
+parser.add_argument("username", help="Username to use in file pair suffixes (e.g., chen)")
+args = parser.parse_args()
+username = args.username
+
+# === Define File Pairs Dynamically ===
 file_pairs = [
-    ("front/package.json", "front/package.json.chen"),
-    ("front/.env", "front/env_chen"),
-    ("server/package.json", "server/package.json.chen"),
-    ("server/.env", "server/env_chen"),
+    ("front/package.json", f"front/package.json.{username}"),
+    ("front/.env", f"front/env_{username}"),
+    ("server/package.json", f"server/package.json.{username}"),
+    ("server/.env", f"server/env_{username}"),
 ]
 
+# === Function to Calculate MD5 ===
 def file_md5(filepath):
-    """Calculate MD5 checksum of a file."""
     hash_md5 = hashlib.md5()
     try:
         with open(filepath, "rb") as f:
@@ -19,9 +26,12 @@ def file_md5(filepath):
         return hash_md5.hexdigest()
     except FileNotFoundError:
         return None
+    except PermissionError:
+        print(f"    ❌ Permission denied: {filepath}")
+        return None
 
-print("Comparing file pairs...\n")
-
+# === Comparison Logic ===
+print(f"Comparing file pairs for user '{username}'...\n")
 all_match = True
 
 for i, (file1, file2) in enumerate(file_pairs, start=1):
@@ -42,6 +52,8 @@ for i, (file1, file2) in enumerate(file_pairs, start=1):
         print("    ✅ Files are identical.")
     else:
         print("    ❌ Files are different!")
+        print(f"    MD5 File 1: {hash1}")
+        print(f"    MD5 File 2: {hash2}")
         all_match = False
 
     print()
