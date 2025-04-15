@@ -21,36 +21,20 @@ export default function Register() {
     e.preventDefault();
     setError("");
 
-    try {
-      await api.post('/auth/register', {
-        username,
-        password,
-        first_name: firstName,
-        family_name: familyName,
-        email,
-        date_of_birth: dateOfBirth,
-        preferences: { page_size: pageSize },
-      });
-      
-      // Auto-login after successful registration
-      const result = await signup({
-        username,
-        password,
-        first_name: firstName,
-        family_name: familyName,
-        email,
-        date_of_birth: dateOfBirth,
-        preferences: { page_size: pageSize },
-      });
-      
-      if (result.success) {
-        navigate("/about");
-      } else {
-        setError(result.error || "Registration failed");
-      }
-    } catch (err) {
-      console.error("Registration error:", err);
-      setError(err.response?.data?.error || "Registration failed");
+    const result = await signup({
+      username,
+      password,
+      first_name: firstName,
+      family_name: familyName,
+      email,
+      date_of_birth: dateOfBirth,
+      preferences: { page_size: pageSize },
+    });
+
+    if (result.success) {
+      navigate("/about");
+    } else {
+      setError(result.error || "Registration failed");
     }
   };
 
