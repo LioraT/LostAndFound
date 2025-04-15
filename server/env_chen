@@ -1,5 +1,5 @@
 PORT=5000
-MONGODB_URI='mongodb://127.0.0.1:27017/lcgis'
+MONGODB_URI='mongodb://127.0.0.1:27017/lostnfound'
 
 # this is how to create the secret in case we want to change:
 #node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
