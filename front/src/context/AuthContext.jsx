@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../services/axios';
+import api from '../api/axios';
 //1. The api uses the base URL from the .env file, 
 //2.  Adds the token to the request header
 //3.  Handles the response and error

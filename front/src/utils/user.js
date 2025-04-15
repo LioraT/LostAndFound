@@ -1,4 +1,4 @@
-import api from '../services/axios';
+import api from '../api/axios';
 
 export const getUserPageSize = async () => {
   try {

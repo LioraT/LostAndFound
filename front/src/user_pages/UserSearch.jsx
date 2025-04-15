@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getUserPageSize } from "../utils/user";
 import styles from "../styles/theme.module.css";
-import api from '../services/axios';
+import api from '../api/axios';
 
 export default function UserSearch() {
   const [query, setQuery] = useState("");

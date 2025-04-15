@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import styles from "../styles/theme.module.css";
-import api from '../services/axios';
+import api from '../api/axios';
 
 export default function EditUser() {
   const { id } = useParams();

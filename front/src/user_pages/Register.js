@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; 
 import styles from "../styles/theme.module.css";
-import api from '../services/axios';
+import api from '../api/axios';
 
 export default function Register() {
   const [username, setUsername] = useState("");

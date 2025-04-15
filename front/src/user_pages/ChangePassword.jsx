@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import styles from "../styles/theme.module.css";
-import api from "../services/axios"; //axios instance
+import api from "../api/axios"; //axios instance
 
 export default function ChangePassword() {
   const navigate = useNavigate();
