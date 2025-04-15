@@ -5,9 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; 
 import styles from "../styles/theme.module.css";
 
-
-const API_URL = process.env.REACT_APP_API_URL;
-
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -28,35 +25,7 @@ export default function Login() {
     }
   };
 
-/*
-  const handleLogin = async (e) => {
-    e.preventDefault();
 
-    try {
-      const res = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("username", username);
-          navigate("/about");
-        } else {
-          setError(data.error || "Login token failed");
-        }
-      } else {
-        setError("Login failed");
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Something went wrong.");
-    }
-  };
-*/
   return (
     <div className={styles.loginContainer}>
       <h2>Login</h2>

@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import styles from "../styles/theme.module.css";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import api from '../api/axios';
 
 export default function EditUser() {
   const { id } = useParams();
@@ -18,27 +17,11 @@ export default function EditUser() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      if (!token) {
-        navigate(`/login`);
-        return;
-      }
-
       try {
-        const res = await fetch(`${API_URL}/protected/users/${id}`, {
-          headers: { Authorization: token },
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          setError(data.error || "Unauthorized or not found");
-          return;
-        }
-
+        const { data } = await api.get(`/protected/users/${id}`);
         setUser(data);
       } catch (err) {
-        console.error(err);
-        setError("Failed to load user.");
+        setError(err.response?.data?.error || "Failed to load user.");
       }
     };
 
@@ -57,29 +40,12 @@ export default function EditUser() {
     const confirm = window.confirm("Are you sure you want to delete this user?");
     if (!confirm) return;
 
-    if (!token) {
-      navigate(`/login`);
-      return;
-    }
-
     try {
-      const res = await fetch(`${API_URL}/protected/users/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: token },
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.error || "Failed to delete user.");
-        return;
-      }
-
+      await api.delete(`/protected/users/${id}`);
       alert("User deleted successfully.");
       navigate("/search_users");
     } catch (err) {
-      console.error("Delete error:", err);
-      alert("An error occurred while deleting the user.");
+      alert(err.response?.data?.error || "Failed to delete user.");
     }
   };
 
@@ -88,32 +54,11 @@ export default function EditUser() {
     setError("");
     setMessage("");
 
-    if (!token) {
-      navigate(`/login`);
-      return;
-    }
-
     try {
-      const res = await fetch(`${API_URL}/protected/users/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify(user),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Update failed.");
-        return;
-      }
-
+      const { data } = await api.put(`/protected/users/${id}`, user);
       setMessage("User updated successfully.");
     } catch (err) {
-      console.error(err);
-      setError("Error while updating user.");
+      setError(err.response?.data?.error || "Update failed.");
     }
   };
 
