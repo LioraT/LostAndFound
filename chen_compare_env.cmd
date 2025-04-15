@@ -1,2 +1,2 @@
 @echo off
-python chen_compare_env.py
+python user_compare_env.py chen
