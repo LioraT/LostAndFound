@@ -4,11 +4,8 @@ const Item = require('../models/item');
 const verifyToken = require('../middleware/authMiddleware');
 const User = require('../models/user');
 
-// Add verifyToken middleware to all routes
-router.use(verifyToken);
-
-// Get all items (now protected)
-router.get('/', async (req, res) => {
+// Get all items
+router.get('/', verifyToken, async (req, res) => {
   try {
     const items = await Item.find();
     res.json(items);
@@ -18,8 +15,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get items within a specific area (now protected)
-router.get('/area', async (req, res) => {
+// Get items within a specific area (for map bounds)
+router.get('/area', verifyToken, async (req, res) => {
   try {
     const { swLat, swLng, neLat, neLng } = req.query;
 
@@ -40,59 +37,8 @@ router.get('/area', async (req, res) => {
   }
 });
 
-// Get a single item (now protected)
-router.get('/:id', async (req, res) => {
-  try {
-    const item = await Item.findById(req.params.id)
-      .populate('owner', 'first_name last_name email');
-    if (!item) {
-      return res.status(404).json({ message: 'Item not found' });
-    }
-    res.json(item);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Create a new item (already protected)
-router.post('/', async (req, res) => {
-  try {
-    const item = new Item({
-      ...req.body,
-      owner: req.user._id,
-      owner_name: req.user.first_name
-    });
-
-    const newItem = await item.save();
-    res.status(201).json(newItem);
-  } catch (error) {
-    console.error('Error creating item:', error);
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Delete an item (already protected)
-router.delete('/:id', async (req, res) => {
-  try {
-    const item = await Item.findById(req.params.id);
-    if (!item) {
-      return res.status(404).json({ message: 'Item not found' });
-    }
-
-    // Check if user is the owner
-    if (item.owner.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Not authorized' });
-    }
-
-    await item.deleteOne();
-    res.json({ message: 'Item deleted' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Generate test items (now protected)
-router.post('/test-data', async (req, res) => {
+// Generate test items (development only)
+router.post('/test-data', verifyToken, async (req, res) => {
   try {
     const users = await User.find();
     
@@ -177,6 +123,67 @@ router.post('/test-data', async (req, res) => {
       details: error.message,
       stack: error.stack
     });
+  }
+});
+
+// Create a new item (protected route)
+router.post('/', verifyToken, async (req, res) => {
+  try {
+    // Get the user first
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const item = new Item({
+      ...req.body,
+      owner: req.userId,          // Use req.userId instead of req.user._id
+      owner_name: user.first_name // Use the found user's first_name
+    });
+
+    const newItem = await item.save();
+    res.status(201).json(newItem);
+  } catch (error) {
+    console.error('Error creating item:', error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Get a single item
+router.get('/:id', verifyToken, async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id)
+      .populate('owner', 'first_name last_name email');
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+    res.json(item);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Delete an item (protected route)
+router.delete('/:id', verifyToken, async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+
+    // Get user to check if admin
+    const user = await User.findById(req.userId);
+    
+    // Allow deletion if user is owner or admin
+    if (item.owner.toString() !== req.userId.toString() && !user.is_admin) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    await item.deleteOne();
+    res.json({ message: 'Item deleted' });
+  } catch (error) {
+    console.error('Error in delete:', error);
+    res.status(500).json({ message: error.message });
   }
 });
 
