@@ -6,6 +6,7 @@
  const app = express();
  const authRoutes = require('./routes/auth');
  const protectedRoute = require('./routes/protectedRoute');
+ const itemsRoutes = require('./routes/items');
  app.use(cors());
  app.use(express.json());
  
@@ -30,6 +31,7 @@ async function startServer() {
 
     app.use('/auth', authRoutes);
     app.use('/protected', protectedRoute);
+    app.use('/items', itemsRoutes);
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);

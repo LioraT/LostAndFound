@@ -136,12 +136,14 @@ router.post('/test-data', async (req, res) => {
         owner: randomUser._id,
         owner_name: randomUser.first_name,
         telephone: '050-1234567',
-        title: `${area} ${item-type} item ${i + 1}`,
+        title: `${area} ${type} item ${i + 1}`,
         item_category: category,
         item_description: `A ${category} that was ${type} in ${area}.`,
-        item: {
+        item_type: {
           type: type,
-          resolved: false
+          dateReported: new Date(),
+          resolved: false,
+          matchedWith: null
         },
         address: `${i + 1} ${area} Street, Tel Aviv`,
         location: {
