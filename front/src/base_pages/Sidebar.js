@@ -1,12 +1,13 @@
 //styledone
 
 import { NavLink } from "react-router-dom";
-import {  
+import {
   FaHome,
   FaInfoCircle,
   FaUserCircle,
   FaKey,
   FaSearch,
+  FaList
 } from "react-icons/fa";
 import styles from "../styles/theme.module.css";
 
@@ -21,6 +22,15 @@ export default function Sidebar() {
       >
         <FaHome className={styles.sidebarIcon} />
         <span className={styles.sidebarLabel}>Home</span>
+      </NavLink>
+
+      <NavLink to="/items"
+        className={({ isActive }) =>
+          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
+        }
+      >
+        <FaList className={styles.sidebarIcon} />
+        <span className={styles.sidebarLabel}>Items List</span>
       </NavLink>
 
       <NavLink
@@ -63,7 +73,7 @@ export default function Sidebar() {
         <span className={styles.sidebarLabel}>Search Users</span>
       </NavLink>
 
-     
+
     </aside>
   );
 }
