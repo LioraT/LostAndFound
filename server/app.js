@@ -7,6 +7,7 @@
  const authRoutes = require('./routes/auth');
  const protectedRoute = require('./routes/protectedRoute');
  const itemsRoutes = require('./routes/items');
+ const devRoutes = require('./routes/devRoute');
  app.use(cors());
  app.use(express.json());
  
@@ -32,6 +33,11 @@ async function startServer() {
     app.use('/auth', authRoutes);
     app.use('/protected', protectedRoute);
     app.use('/items', itemsRoutes);
+    
+    // Only use dev routes in development
+    if (process.env.NODE_ENV === 'development') {
+      app.use('/dev', devRoutes);
+    }
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);

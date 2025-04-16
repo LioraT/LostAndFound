@@ -5,3 +5,5 @@ MONGODB_URI='mongodb://127.0.0.1:27017/lostnfound'
 #node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 JWT_SECRET='f211aeb62e6c03f3280a5bfc3fa52ddb2a3fb22539bedd41aa78a59745ddc39c'
 
+#to use devRoute (test-data) in Development
+NODE_ENV=development
