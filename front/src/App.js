@@ -5,6 +5,7 @@ import Layout from "./layout/Layout";
 import Home from "./pages/Home";
 import Login from "./user_pages/Login";
 import Register from "./user_pages/Register";
+import ItemsList from './pages/Items/ItemsList';
 import About from "./pages/About";
 import Profile from "./user_pages/Profile";
 import ChangePassword from "./user_pages/ChangePassword";
@@ -63,6 +64,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <UserSearch />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="items"
+            element={
+              <ProtectedRoute>
+                <ItemsList />
               </ProtectedRoute>
             }
           />
