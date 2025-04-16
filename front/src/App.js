@@ -11,6 +11,7 @@ import Profile from "./user_pages/Profile";
 import ChangePassword from "./user_pages/ChangePassword";
 import EditUser from "./user_pages/EditUser";
 import UserSearch from "./user_pages/UserSearch";
+import MapNeighborhoodSearch from "./pages/MapNeighborhoodSearch";
 import NotFound from "./base_pages/NotFound";
 
 
@@ -67,7 +68,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="search_neighb"
+            element={
+              <ProtectedRoute>
+                <MapNeighborhoodSearch />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="items"
             element={
