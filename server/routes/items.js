@@ -4,7 +4,10 @@ const Item = require('../models/item');
 const verifyToken = require('../middleware/authMiddleware');
 const User = require('../models/user');
 
-// Get all items
+// Add verifyToken middleware to all routes
+router.use(verifyToken);
+
+// Get all items (now protected)
 router.get('/', async (req, res) => {
   try {
     const items = await Item.find();
@@ -15,7 +18,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get items within a specific area (for map bounds)
+// Get items within a specific area (now protected)
 router.get('/area', async (req, res) => {
   try {
     const { swLat, swLng, neLat, neLng } = req.query;
@@ -37,7 +40,7 @@ router.get('/area', async (req, res) => {
   }
 });
 
-// Get a single item
+// Get a single item (now protected)
 router.get('/:id', async (req, res) => {
   try {
     const item = await Item.findById(req.params.id)
@@ -51,8 +54,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create a new item (protected route)
-router.post('/', verifyToken, async (req, res) => {
+// Create a new item (already protected)
+router.post('/', async (req, res) => {
   try {
     const item = new Item({
       ...req.body,
@@ -68,8 +71,8 @@ router.post('/', verifyToken, async (req, res) => {
   }
 });
 
-// Delete an item (protected route)
-router.delete('/:id', verifyToken, async (req, res) => {
+// Delete an item (already protected)
+router.delete('/:id', async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
     if (!item) {
@@ -88,7 +91,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
   }
 });
 
-// Generate test items (development only)
+// Generate test items (now protected)
 router.post('/test-data', async (req, res) => {
   try {
     const users = await User.find();
