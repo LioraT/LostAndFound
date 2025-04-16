@@ -5,3 +5,5 @@ MONGODB_URI='mongodb+srv://mongo123:mongomongo7@cluster0.98yjd.mongodb.net/lostn
 #node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 JWT_SECRET='f211aeb62e6c03f3280a5bfc3fa52ddb2a3fb22539bedd41aa78a59745ddc39c'
 
+#to use deRoute (test-data) in Development
+NODE_ENV=development
