@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, useMapEvents, Polygon } from 'react-leaflet';
+import { MapContainer, TileLayer, useMapEvents, Polygon, Marker, Popup } from 'react-leaflet';
 import api from '../api/axios';
 import styles from '../styles/theme.module.css';
 import 'leaflet/dist/leaflet.css';
 import { useAuth } from "../context/AuthContext";
+import L from 'leaflet';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -19,24 +20,31 @@ function ClickHandler({ onClick }) {
 
 export default function MapNeighborhoodSearch() {
   const [neighborhoodName, setNeighborhoodName] = useState('');
-  const [error, setError] = useState('');
   const [highlightedPolygon, setHighlightedPolygon] = useState(null);
-  const { token } = useAuth();
+  const [error, setError] = useState('');
   const [items, setItems] = useState([]);
-
+  const { token } = useAuth();
+  
   const handleMapClick = async (coords) => {
+    if (!token) {
+      setError("User not authenticated");
+      return;
+    }
     try {
       const { data } = await api.post(`${API_URL}/neighborhoods/find-by-coordinates`,
-        {
-          lng: coords[0],
-          lat: coords[1],
-        });
+        { lng: coords[0], lat: coords[1] },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
+//new chages
+      const shemshchun = data.shemshchun;
       setNeighborhoodName(data.shemshchun);
       setError('');
-      fetchPolygon(data.shemshchun); // optional for highlight
-      console.log("neg",data.shemshchun);
-      fetchItemsInNeighborhood(data.shemshchun);
+      
+      await fetchPolygon(data.shemshchun); // optional for highlight
+      await fetchItems(data.shemshchun);   //fetchItems 
+      //fetchItemsInNeighborhood(data.shemshchun);
+
     } catch (err) {
       console.error(err);
       setNeighborhoodName('');
@@ -55,9 +63,17 @@ export default function MapNeighborhoodSearch() {
     }
   };
 
+  //fetch items
+  const fetchItems = async (shemshchun) => {
+    try {
+      const { data } = await api.get(`${API_URL}/neighborhoods/by-neighborhood/${encodeURIComponent(shemshchun)}`);
+      setItems(data); // Set item array
+    } catch (err) {
+      console.error("Error fetching items", err);
+    }
+  };
 
-
-  const fetchItemsInNeighborhood = async (shemshchun) => {
+/*  const fetchItemsInNeighborhood = async (shemshchun) => {
     try {
       const { data } = await api.get(`${API_URL}/neighborhoods/by-neighborhood/${encodeURIComponent(shemshchun)}`);
       setItems(data);
@@ -65,7 +81,7 @@ export default function MapNeighborhoodSearch() {
       console.error('Error fetching items', err);
       setItems([]);
     }
-  };
+  }; */
 
 
   return (
@@ -74,53 +90,42 @@ export default function MapNeighborhoodSearch() {
       <MapContainer
         center={[32.0853, 34.7818]}
         zoom={13}
-        style={{ height: '500px', width: '100%' }}
-      >
+        style={{ height: '500px', width: '100%' }}>
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ClickHandler onClick={handleMapClick} />
         {highlightedPolygon && <Polygon positions={highlightedPolygon} />}
+        {items.map((item, index) => (
+        <Marker 
+          key={index} 
+          position={[item.location.coordinates[1], item.location.coordinates[0]]}
+          icon={L.icon({ iconUrl: '/marker-icon.png', iconSize: [25, 41], iconAnchor: [12, 41] })}
+          >
+          <Popup>
+            <div>
+              <strong>{item.item_category}</strong><br />
+              {new Date(item.item_type.dateReported).toLocaleDateString()}<br />
+              {item.item_description} 
+            </div>
+          </Popup>
+        </Marker>
+        ))}
       </MapContainer>
     </div>
 
     <div className={styles.infoBox}>
       <p>This is the info box.</p>
-      {neighborhoodName && <p>Neighborhood: {neighborhoodName}</p>}
+      {neighborhoodName && (
+        <p>
+        Neighborhood: {neighborhoodName}<br />
+        Items found: {items.length}
+      </p>
+      )}
+
       {error && <p className={styles.error}>{error}</p>}
     </div>
   </div>
-   /* <div className={styles.mapContainer}>
-    <MapContainer center={[32.0853, 34.7818]} zoom={13} className={styles.mapBox}>
-      <TileLayer
-        attribution='&copy; OpenStreetMap contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <ClickHandler onClick={handleMapClick} />
-      {highlightedPolygon && <Polygon positions={highlightedPolygon} />}
-    </MapContainer>
-  
-    <div className={styles.infoBox}>
-      {neighborhoodName && <p><strong>Neighborhood:</strong> {neighborhoodName}</p>}
-      {error && <p className={styles.error}>{error}</p>}
-      {items.length > 0 ? (
-        <>
-          <h3>Items in this neighborhood:</h3>
-          <ul className={styles.itemList}>
-            {items.map((item) => (
-              <li key={item._id}>
-                <strong>{item.item_type.type.toUpperCase()}:</strong> {item.title}<br />
-                <em>{item.item_description}</em> ({item.item_category})<br />
-                Phone: {item.telephone}
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : neighborhoodName && <p>No items reported in this neighborhood.</p>}
-    </div>
-  </div>*/
-  
-  );    
-  
+  );   
 }

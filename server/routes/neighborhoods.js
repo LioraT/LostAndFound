@@ -1,20 +1,19 @@
-// server/routes/neighborhoods.js (or wherever your routes live)
  const express = require('express');
  const router = express.Router();
  const verifyToken = require("../middleware/authMiddleware");
  const Item = require("../models/item");
  //const adminOnly = require("../middleware/adminOnly");
 // const mongoose = require('mongoose');
-
 const Neighborhood = require("../models/neighborhoodModel"); // Adjust path as needed
 
+
+// Identify neighborhood from coordinates
 router.post("/find-by-coordinates",verifyToken, async (req, res) => {
   const { lng, lat } = req.body;
 
   if (lng == null || lat == null) {
     return res.status(400).json({ error: "Missing coordinates" });
   }
-  console.log("in find cooo",lng, lat);
   try {
     const neighborhood = await Neighborhood.findOne({
       geometry: {
@@ -38,7 +37,7 @@ router.post("/find-by-coordinates",verifyToken, async (req, res) => {
   }
 });
 
-// GET /neighborhoods/by-name/:shemshchun
+// GET /neighborhoods/by-name/:shemshchun = Get items within neighborhood polygon
 router.get('/by-name/:shemshchun', verifyToken, async (req, res) => {
   const { shemshchun } = req.params;
 
@@ -56,7 +55,7 @@ router.get('/by-name/:shemshchun', verifyToken, async (req, res) => {
   }
 });
 
-
+// Get items within neighborhood polygon
 router.get('/by-neighborhood/:shemshchun', verifyToken, async (req, res) => {
   const { shemshchun } = req.params;
 
