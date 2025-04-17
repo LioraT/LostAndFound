@@ -12,6 +12,7 @@ import ChangePassword from "./user_pages/ChangePassword";
 import EditUser from "./user_pages/EditUser";
 import UserSearch from "./user_pages/UserSearch";
 import MapNeighborhoodSearch from "./pages/MapNeighborhoodSearch";
+import LostFoundMap from "./pages/LostFoundMap";
 import NotFound from "./base_pages/NotFound";
 
 
@@ -73,6 +74,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <MapNeighborhoodSearch />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="lostfound_report"
+            element={
+              <ProtectedRoute>
+                <LostFoundMap/>
               </ProtectedRoute>
             }
           />

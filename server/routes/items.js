@@ -4,6 +4,7 @@ const Item = require('../models/item');
 const verifyToken = require('../middleware/authMiddleware');
 const User = require('../models/user');
 
+
 // Get all items
 router.get('/', verifyToken, async (req, res) => {
   try {
@@ -97,5 +98,29 @@ router.delete('/:id', verifyToken, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+// ✅ NEW: put item in the DB by form
+router.put('/', verifyToken, async (req, res) => {
+  try {
+    // Get the user first
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const item = new Item({
+      ...req.body,
+      owner: req.userId,
+      owner_name: user.first_name
+    });
+
+    const newItem = await item.save();
+    res.status(201).json(newItem);
+  } catch (error) {
+    console.error('Error creating item:', error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
 
 module.exports = router;
