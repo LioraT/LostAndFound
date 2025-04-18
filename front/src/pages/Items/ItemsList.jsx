@@ -3,6 +3,8 @@ import { useAuth } from '../../context/AuthContext';
 import api from '../../api/axios';
 import styles from '../../styles/items.module.css';
 import ItemCard from './ItemCard';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
 
 const ItemsList = () => {
 
@@ -21,6 +23,7 @@ const ItemsList = () => {
     const fetchItems = async () => {
         try {
             const response = await api.get('/items');
+            console.log('Items received:', response.data);
             setItems(response.data);
             setLoading(false);
         } catch (err) {
@@ -82,14 +85,18 @@ const ItemsList = () => {
             </div>
 
             <div className={styles.itemsGrid}>
-                {currentItems.map(item => (
-                    <ItemCard 
-                        key={item._id}
-                        item={item}
-                        onDelete={handleDelete}
-                        isOwner={user && item.owner === user._id}
-                    />
-                ))}
+                {currentItems.map(item => {
+                    console.log('Current item:', item);
+                    console.log('User:', user);
+                    return (
+                        <ItemCard 
+                            key={item._id}
+                            item={item}
+                            onDelete={handleDelete}
+                            isOwner={user?._id && item?.owner?.toString() === user._id.toString()}
+                        />
+                    );
+                })}
             </div>
 
             {/* Pagination */}

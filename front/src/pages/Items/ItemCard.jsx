@@ -78,7 +78,7 @@ const ItemCard = ({ item, onDelete, isOwner }) => {
               <div className={styles.itemActions}>
                   <button 
                       className={styles.viewOnMap}
-                      onClick={() => navigate(`/items/map?item=${item._id}&zoom=true`)}
+                      onClick={() => navigate(`/search_neighb?item=${item._id}&zoom=true`)}
                   >
                       View on Map
                   </button>
