@@ -73,17 +73,8 @@ export default function MapNeighborhoodSearch() {
     }
   };
 
-/*  const fetchItemsInNeighborhood = async (shemshchun) => {
-    try {
-      const { data } = await api.get(`${API_URL}/neighborhoods/by-neighborhood/${encodeURIComponent(shemshchun)}`);
-      setItems(data);
-    } catch (err) {
-      console.error('Error fetching items', err);
-      setItems([]);
-    }
-  }; */
 
-
+  
   return (
     <div>
     <div className={styles.mapContainer}>
