@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, useMapEvents, Polygon, Marker, Popup } from 'r
 import api from '../api/axios';
 import styles from '../styles/theme.module.css';
 import 'leaflet/dist/leaflet.css';
-import { useAuth } from "../context/AuthContext";
+import { mapIcons } from '../utils/mapIcons';
 import L from 'leaflet';
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -23,18 +23,14 @@ export default function MapNeighborhoodSearch() {
   const [highlightedPolygon, setHighlightedPolygon] = useState(null);
   const [error, setError] = useState('');
   const [items, setItems] = useState([]);
-  const { token } = useAuth();
+
   
   const handleMapClick = async (coords) => {
-    if (!token) {
-      setError("User not authenticated");
-      return;
-    }
     try {
-      const { data } = await api.post(`${API_URL}/neighborhoods/find-by-coordinates`,
-        { lng: coords[0], lat: coords[1] },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const { data } = await api.post(`${API_URL}/neighborhoods/find-by-coordinates`, {
+        lng: coords[0], 
+        lat: coords[1]
+      });
 
 //new chages
       const shemshchun = data.shemshchun;
@@ -92,13 +88,16 @@ export default function MapNeighborhoodSearch() {
         <Marker 
           key={index} 
           position={[item.location.coordinates[1], item.location.coordinates[0]]}
-          icon={L.icon({ iconUrl: '/marker-icon.png', iconSize: [25, 41], iconAnchor: [12, 41] })}
+          icon={item.item_type.type === 'lost' ? mapIcons.lost : mapIcons.found}
           >
           <Popup>
             <div>
-              <strong>{item.item_category}</strong><br />
-              {new Date(item.item_type.dateReported).toLocaleDateString()}<br />
-              {item.item_description} 
+              <strong>{item.title}</strong><br />
+              Category: {item.item_category}<br />
+              Status: {item.item_type.type.toUpperCase()}<br />
+              Date: {new Date(item.item_type.dateReported).toLocaleDateString()}<br />
+              Description: {item.item_description}<br />
+              Contact: {item.owner_name} ({item.telephone})
             </div>
           </Popup>
         </Marker>
