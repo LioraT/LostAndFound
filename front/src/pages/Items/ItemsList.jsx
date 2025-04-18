@@ -23,14 +23,12 @@ const ItemsList = () => {
     const fetchItems = async () => {
         try {
             const response = await api.get('/items');
-            console.log('Items received:', response.data);
+            console.log('Items:', response.data);
+            console.log('Current user:', user);
             setItems(response.data);
             setLoading(false);
         } catch (err) {
-            console.error('Error fetching items:', {
-                status: err.response?.status,
-                message: err.response?.data?.error
-            });
+            console.error('Error fetching items:', err);
             setError(err.response?.data?.error || 'Failed to fetch items');
             setLoading(false);
         }
@@ -46,7 +44,7 @@ const ItemsList = () => {
 
         try {
             await api.delete(`/items/${itemId}`);
-            setItems(items.filter(i => i._id !== itemId));
+            setItems(items.filter(item => item._id !== itemId));
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to delete item');
         }
@@ -93,7 +91,7 @@ const ItemsList = () => {
                             key={item._id}
                             item={item}
                             onDelete={handleDelete}
-                            isOwner={user?._id && item?.owner?.toString() === user._id.toString()}
+                            isOwner={user?._id === item.owner}
                         />
                     );
                 })}

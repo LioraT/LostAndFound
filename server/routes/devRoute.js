@@ -7,21 +7,24 @@ const verifyToken = require('../middleware/authMiddleware');
 // Generate test items (development only)
 router.post('/test-data', verifyToken, async (req, res) => {
     try {
-      const users = await User.find();
+      // Modified query to explicitly select fields and use lean()
+      const users = await User.find()
+        .select('username first_name family_name email _id')
+        .lean();
       
       if (users.length === 0) {
         console.log('No users found, creating test user');
         const testUser = new User({
-          user_id: 1,
-          user_name: 'testuser1',
+          username: 'testuser1',
           password: 'password123',
           first_name: 'Test',
-          birth_date: new Date(),
-          status: true,
+          family_name: 'User',
+          date_of_birth: new Date(),
+          email: 'test@example.com',
           is_admin: false
         });
         await testUser.save();
-        users.push(testUser);
+        users.push(testUser.toObject()); // Convert to plain object
       }
   
       await Item.deleteMany({});
@@ -36,11 +39,18 @@ router.post('/test-data', verifyToken, async (req, res) => {
       for (let i = 0; i < 20; i++) {
         // Select a random user for each  
         const randomUser = users[Math.floor(Math.random() * users.length)];
-        console.log(`Item ${i + 1} owner:`, { 
-          id: randomUser._id, 
-          name: randomUser.first_name,
-          username: randomUser.user_name 
+        
+        // Debug logging for user data
+        console.log('Random user data for item', i + 1, ':', {
+          id: randomUser._id,
+          username: randomUser.username,
+          first_name: randomUser.first_name
         });
+
+        if (!randomUser.username) {
+          console.error('Warning: username is missing for user:', randomUser);
+          continue; // Skip this iteration if username is missing
+        }
   
         const latOffset = (Math.random() - 0.5) * 0.02;
         const lngOffset = (Math.random() - 0.5) * 0.02;
@@ -50,7 +60,7 @@ router.post('/test-data', verifyToken, async (req, res) => {
   
         const itemData = {
           owner: randomUser._id,
-          owner_name: randomUser.first_name,
+          owner_name: randomUser.username,
           telephone: '050-1234567',
           title: `${area} ${type} item ${i + 1}`,
           item_category: category,
@@ -70,13 +80,22 @@ router.post('/test-data', verifyToken, async (req, res) => {
             ]
           }
         };
+
+        // Debug logging for item data
+        console.log('Creating item with data:', {
+          owner_id: itemData.owner,
+          owner_name: itemData.owner_name,
+          title: itemData.title
+        });
   
         const item = new Item(itemData);
         const savedItem = await item.save();
         testItems.push(savedItem);
       }
   
-      const populatedItems = await Item.find().populate('owner', 'first_name user_name');
+      const populatedItems = await Item.find()
+        .populate('owner', 'username first_name')
+        .lean();
   
       res.json({ 
         message: `Created ${testItems.length} test items`,
@@ -91,6 +110,6 @@ router.post('/test-data', verifyToken, async (req, res) => {
         stack: error.stack
       });
     }
-  });
-  
+});
+
 module.exports = router;

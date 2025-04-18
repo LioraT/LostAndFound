@@ -19,10 +19,17 @@ export const AuthProvider = ({ children }) => {
   // Initialize authentication state from localStorage on app start
   // This ensures user stays logged in after page refresh
   useEffect(() => {
-    const initializeAuth = () => {
+    const initializeAuth = async () => {
       const savedUsername = localStorage.getItem("username");
       if (token && savedUsername) {
-        setUser({ username: savedUsername });
+        try {
+          // This is an async operation - fetches user profile from server
+          const { data } = await api.get('/protected/profile');
+          setUser({ username: savedUsername, _id: data._id });
+        } catch (err) {
+          console.error('Error fetching user profile:', err);
+          handleSignOut(); // Sign out if profile fetch fails
+        }
       }
       setLoading(false);
     };
@@ -51,10 +58,15 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", username);
       
-      // Update state
-      setToken(data.token);
-      setUser({ username });
+      // Step 3: Get user profile to get the ID and other details
+      const profileResponse = await api.get('/protected/profile');
+      const userData = profileResponse.data;
       
+      // Store complete user data
+      setToken(data.token);
+      setUser({username: userData.username, _id: userData._id });
+      
+      localStorage.setItem("username", userData.username);
       
       return { success: true };
     } catch (error) {
