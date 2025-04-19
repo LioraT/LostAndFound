@@ -29,7 +29,7 @@ export default function LostFoundForm({ coordinates }) {
     if (!token) return alert("User not authenticated");
 
     const item = {
-        owner_name: user?.first_name || "guest", // fallback if needed
+        owner_name: user?.username || "guest", // fallback if needed
         telephone: formData.telephone,
         title: formData.title,
         item_category: formData.item_category,
@@ -45,11 +45,7 @@ export default function LostFoundForm({ coordinates }) {
         }
     }
     try {
-      const { data } = await api.put('/items', payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await api.put('/items', payload); //axios interceptor handles it
       console.log("Submitted Data:", data);
     } catch (err) {
       console.error("Submission error:", err);

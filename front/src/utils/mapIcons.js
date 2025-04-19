@@ -16,5 +16,21 @@ export const mapIcons = {
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
+    }),
+    lostHighlighted: new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [35, 57],
+        iconAnchor: [17, 57],
+        popupAnchor: [1, -50],
+        shadowSize: [41, 41]
+    }),
+    foundHighlighted: new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [35, 57],
+        iconAnchor: [17, 57],
+        popupAnchor: [1, -50],
+        shadowSize: [41, 41]
     })
 };

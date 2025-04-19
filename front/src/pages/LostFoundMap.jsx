@@ -120,9 +120,11 @@ export default function LostFoundMap() {
     };
 
     try {
-      const res = await api.post("/items/", data, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.post("/items/", data
+      //   {
+      //   headers: { Authorization: `Bearer ${token}` } //axios interceptor handles it  
+      // }
+    );
       console.log("Submitted Data:", res.data);
       alert("Item logged successfully.");
     } catch (err) {
@@ -230,4 +232,3 @@ export default function LostFoundMap() {
     </div>
   );
 }
-

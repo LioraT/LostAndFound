@@ -63,22 +63,48 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.itemImage {
-    height: 150px;
-    overflow: hidden;
+.itemImageContainer {
+    height: 200px; /* Increased height to accommodate map */
     position: relative;
+    background: #f5f5f5;
+    width: 100%;
+}
+
+.mapPreviewContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.mapPreview {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .itemStatus {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.itemType {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    top: 10px;
+    left: 10px;          /* Changed from right to left */
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 700;
     z-index: 1000;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: white;
 }
 
 .lost {
@@ -142,37 +168,59 @@
     margin: 0;
 }
 
-.itemActions {
-    padding: 0.5rem;
-    margin-top: 0.3rem;
-    border-top: 1px solid #eee;
+.itemFooter {
     display: flex;
-    gap: 0.5rem;
-    padding-right: 100px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.3rem;
+    padding: 0.5rem;
+    border-top: 1px solid #eee;
 }
 
-.viewOnMap,
+.itemActions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.editItem, .deleteItem {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.editItem {
+    color: #1976d2;  /* Blue color */
+    border-color: #1976d2;
+}
+
+.editItem:hover {
+    background-color: #1976d2;
+    color: white;
+}
+
 .deleteItem {
-    padding: 6px 12px;
-    font-weight: 600;
+    color: #d32f2f;  /* Red color */
+    border-color: #d32f2f;
+}
+
+.deleteItem:hover {
+    background-color: #d32f2f;
+    color: white;
 }
 
 .viewOnMap {
+    padding: 6px 12px;
+    font-weight: 600;
     background-color: #1976d2;
     color: white;
 }
 
 .viewOnMap:hover {
     background-color: #1565c0;
-}
-
-.deleteItem {
-    background-color: #f44336;
-    color: white;
-}
-
-.deleteItem:hover {
-    background-color: #d32f2f;
 }
 
 .itemMapPreview {
@@ -221,29 +269,69 @@
     border-color: #1976d2;
 }
 
-.loading,
-.error {
-    text-align: center;
-    padding: 2rem;
+.contactInfo {
+    margin: 0.2rem 0;
+}
+
+.itemTelephone {
+    font-size: 0.85rem;
+    color: #444;
+    margin: 0;
+    padding-left: 0.5rem;
+}
+
+.itemGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem;
+}
+
+.itemTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1976d2;
+    margin: 0;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.itemTitle:hover {
+    color: #1565c0;
+    text-decoration: underline;
+}
+
+.itemRow {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0.5rem;
+    align-items: baseline;
+    min-height: 1.5rem;
+}
+
+.itemLabel {
+    font-size: 0.85rem;
+    font-weight: 600;
     color: #666;
 }
 
-.error {
-    color: #f44336;
+.itemValue {
+    font-size: 0.85rem;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-@media (min-width: 1400px) {
-    .itemsGrid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    }
-}
-
-@media (max-width: 768px) {
-    .itemsGrid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    }
-    
-    .itemImage {
-        height: 120px;
-    }
+.itemFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #eee;
 }

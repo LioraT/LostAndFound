@@ -50,7 +50,7 @@ router.post('/', verifyToken, async (req, res) => {
     const item = new Item({
       ...req.body,
       owner: req.userId,          // Use req.userId instead of req.user._id
-      owner_name: user.first_name // Use the found user's first_name
+      owner_name: user.username // Use the found user's username
     });
 
     const newItem = await item.save();
@@ -111,7 +111,7 @@ router.put('/', verifyToken, async (req, res) => {
     const item = new Item({
       ...req.body,
       owner: req.userId,
-      owner_name: user.first_name
+      owner_name: user.username
     });
 
     const newItem = await item.save();

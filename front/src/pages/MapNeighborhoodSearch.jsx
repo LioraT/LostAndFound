@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { MapContainer, TileLayer, useMapEvents, Polygon, Marker, Popup } from 'react-leaflet';
 import api from '../api/axios';
 import styles from '../styles/theme.module.css';
 import 'leaflet/dist/leaflet.css';
-import { useAuth } from "../context/AuthContext";
+import { mapIcons } from '../utils/mapIcons';
 import L from 'leaflet';
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -19,22 +20,47 @@ function ClickHandler({ onClick }) {
 }
 
 export default function MapNeighborhoodSearch() {
+  const [searchParams] = useSearchParams();
   const [neighborhoodName, setNeighborhoodName] = useState('');
   const [highlightedPolygon, setHighlightedPolygon] = useState(null);
   const [error, setError] = useState('');
   const [items, setItems] = useState([]);
-  const { token } = useAuth();
-  
-  const handleMapClick = async (coords) => {
-    if (!token) {
-      setError("User not authenticated");
-      return;
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  // Get item ID from URL parameters
+  const itemId = searchParams.get('item');
+  const shouldZoom = searchParams.get('zoom') === 'true';
+
+  // Fetch specific item when component mounts if itemId is provided
+  useEffect(() => {
+    if (itemId) {
+      const fetchItem = async () => {
+        try {
+          const { data } = await api.get(`/items/${itemId}`);
+          setSelectedItem(data);
+          setItems([data]); // Add the item to the items array
+          
+          // If zoom parameter is true, center the map on this item
+          if (shouldZoom && data.location && data.location.coordinates) {
+            // You'll need to get a reference to the map to set its view
+            // This will be handled by a separate map control component
+          }
+        } catch (err) {
+          console.error('Error fetching item:', err);
+          setError('Failed to fetch item');
+        }
+      };
+
+      fetchItem();
     }
+  }, [itemId, shouldZoom]);
+
+  const handleMapClick = async (coords) => {
     try {
-      const { data } = await api.post(`${API_URL}/neighborhoods/find-by-coordinates`,
-        { lng: coords[0], lat: coords[1] },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const { data } = await api.post(`${API_URL}/neighborhoods/find-by-coordinates`, {
+        lng: coords[0], 
+        lat: coords[1]
+      });
 
 //new chages
       const shemshchun = data.shemshchun;
@@ -87,22 +113,34 @@ export default function MapNeighborhoodSearch() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ClickHandler onClick={handleMapClick} />
+        {/* zoom to the marker  */}
+        <MapControl item={selectedItem} shouldZoom={shouldZoom} />
         {highlightedPolygon && <Polygon positions={highlightedPolygon} />}
-        {items.map((item, index) => (
-        <Marker 
-          key={index} 
-          position={[item.location.coordinates[1], item.location.coordinates[0]]}
-          icon={L.icon({ iconUrl: '/marker-icon.png', iconSize: [25, 41], iconAnchor: [12, 41] })}
-          >
-          <Popup>
-            <div>
-              <strong>{item.item_category}</strong><br />
-              {new Date(item.item_type.dateReported).toLocaleDateString()}<br />
-              {item.item_description} 
-            </div>
-          </Popup>
-        </Marker>
-        ))}
+        {items.map((item, index) => {
+          const isHighlighted = item._id === itemId;
+          const icon = item.item_type.type === 'lost' 
+            ? (isHighlighted ? mapIcons.lostHighlighted : mapIcons.lost)
+            : (isHighlighted ? mapIcons.foundHighlighted : mapIcons.found);
+
+          return (
+            <Marker 
+              key={item._id || index}
+              position={[item.location.coordinates[1], item.location.coordinates[0]]}
+              icon={icon}
+            >
+              <Popup>
+                <div>
+                  <strong>{item.title}</strong><br />
+                  Category: {item.item_category}<br />
+                  Status: {item.item_type.type.toUpperCase()}<br />
+                  Date: {new Date(item.item_type.dateReported).toLocaleDateString()}<br />
+                  Description: {item.item_description}<br />
+                  Contact: {item.owner_name} ({item.telephone})
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
     </div>
 
@@ -119,4 +157,21 @@ export default function MapNeighborhoodSearch() {
     </div>
   </div>
   );   
+}
+
+// Add a map control component to handle zooming to the selected item
+function MapControl({ item, shouldZoom }) {
+  const map = useMapEvents({});
+  
+  useEffect(() => {
+    if (item && shouldZoom && item.location && item.location.coordinates) {
+      map.setView(
+        [item.location.coordinates[1], item.location.coordinates[0]],
+        15,
+        { animate: true }
+      );
+    }
+  }, [item, shouldZoom, map]);
+
+  return null;
 }
