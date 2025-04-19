@@ -7,7 +7,10 @@ import {
   FaUserCircle,
   FaKey,
   FaSearch,
-  FaList
+  FaList,
+  FaPlusCircle,
+  FaMap,
+  FaDotCircle
 } from "react-icons/fa";
 import styles from "../styles/theme.module.css";
 
@@ -73,7 +76,35 @@ export default function Sidebar() {
         <span className={styles.sidebarLabel}>Search Users</span>
       </NavLink>
 
+      <NavLink
+        to="/lostfound_report"
+        className={({ isActive }) =>
+          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
+        }
+      >
+        <FaPlusCircle className={styles.sidebarIcon} />
+        <span className={styles.sidebarLabel}>Add item</span>
+      </NavLink>
 
+      <NavLink
+        to="/search_neighb"
+        className={({ isActive }) =>
+          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
+        }
+      >
+        <FaMap className={styles.sidebarIcon} />
+        <span className={styles.sidebarLabel}>neighborhood</span>
+      </NavLink>
+
+     <NavLink
+        to="/search_radius"
+        className={({ isActive }) =>
+          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
+        }
+      >
+        <FaDotCircle className={styles.sidebarIcon} />
+        <span className={styles.sidebarLabel}>radius</span>
+      </NavLink>
     </aside>
   );
 }
