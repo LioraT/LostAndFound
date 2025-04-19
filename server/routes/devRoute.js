@@ -5,7 +5,7 @@ const User = require('../models/user');
 const verifyToken = require('../middleware/authMiddleware');
 
 // Generate test items (development only)
-router.post('/test-data', verifyToken, async (req, res) => {
+router.post('/test-data', verifyToken(), async (req, res) => {
     try {
       // Modified query to explicitly select fields and use lean()
       const users = await User.find()

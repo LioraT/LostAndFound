@@ -2,16 +2,17 @@
  const bcrypt = require('bcrypt');
  const router = express.Router();
  const User = require("../models/user");
+ 
  const verifyToken = require("../middleware/authMiddleware");
  const adminOnly = require("../middleware/adminOnly");
  const mongoose = require('mongoose');
  
 // Protected route
- router.get('/', verifyToken, (req, res) => {
+ router.get('/', verifyToken(), (req, res) => {
     res.status(200).json({ message: `Protected route accessed ${req.userId}` });
  });
 
- router.get('/profile', verifyToken, async (req, res) => {
+ router.get('/profile', verifyToken(), async (req, res) => {
    try {
       const user = await User.findById(req.userId).select("-password");
   
@@ -26,7 +27,7 @@
     }
   });
 
-  router.put("/users/me/password", verifyToken, async (req, res) => {
+  router.put("/users/me/password", verifyToken(), async (req, res) => {
     const { current_password, new_password } = req.body;
   
     if (!current_password || !new_password) {
@@ -56,7 +57,7 @@
     }
   });
 
-  router.get("/users", verifyToken, async (req, res) => {
+  router.get("/users", verifyToken(), async (req, res) => {
     const search = req.query.search || "";
     const limit = parseInt(req.query.limit) || 12;
     const skip = parseInt(req.query.skip) || 0;
@@ -85,7 +86,7 @@
     }
   });
 
-  router.get("/users/:id", verifyToken, adminOnly, async (req, res) => {
+  router.get("/users/:id", verifyToken(), adminOnly, async (req, res) => {
     try {
       const user = await User.findById(req.params.id).select("-password");
       if (!user) {
@@ -98,7 +99,7 @@
     }
   });
 
-  router.put("/users/me", verifyToken, async (req, res) => {
+  router.put("/users/me", verifyToken(), async (req, res) => {
     const allowedUpdates = ["first_name", "family_name", "email", "preferences", "date_of_birth"];
     const updates = {};
     for (let key of allowedUpdates) {
@@ -125,7 +126,7 @@
     }
   });
   
-  router.put("/users/:id", verifyToken, adminOnly, async (req, res) => {
+  router.put("/users/:id", verifyToken(), adminOnly, async (req, res) => {
     try {
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
@@ -144,7 +145,7 @@
     }
   });
 
-  router.delete("/users/:id", verifyToken, adminOnly, async (req, res) => {
+  router.delete("/users/:id", verifyToken(), adminOnly, async (req, res) => {
     try {
       if (req.params.id === req.userId) {
         return res.status(403).json({ error: "You cannot delete your own account from here." });
@@ -164,3 +165,4 @@
   });
 
   module.exports = router;
+

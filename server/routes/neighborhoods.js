@@ -8,7 +8,7 @@ const Neighborhood = require("../models/neighborhoodModel"); // Adjust path as n
 
 
 // Identify neighborhood from coordinates
-router.post("/find-by-coordinates",verifyToken, async (req, res) => {
+router.post("/find-by-coordinates",verifyToken(), async (req, res) => {
   const { lng, lat } = req.body;
 
   if (lng == null || lat == null) {
@@ -38,7 +38,7 @@ router.post("/find-by-coordinates",verifyToken, async (req, res) => {
 });
 
 // GET /neighborhoods/by-name/:shemshchun = Get items within neighborhood polygon
-router.get('/by-name/:shemshchun', verifyToken, async (req, res) => {
+router.get('/by-name/:shemshchun', verifyToken(), async (req, res) => {
   const { shemshchun } = req.params;
 
   try {
@@ -56,7 +56,7 @@ router.get('/by-name/:shemshchun', verifyToken, async (req, res) => {
 });
 
 // Get items within neighborhood polygon
-router.get('/by-neighborhood/:shemshchun', verifyToken, async (req, res) => {
+router.get('/by-neighborhood/:shemshchun', verifyToken(), async (req, res) => {
   const { shemshchun } = req.params;
 
   try {
