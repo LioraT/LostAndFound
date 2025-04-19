@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ../server",
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon --watch .env --ext js,json,env app.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "mongoose": "^8.13.0"
   },
   "devDependencies": {
-    "eslint": "^9.23.0"
+    "eslint": "^9.23.0",
+    "nodemon": "^3.1.9"
   }
 }
