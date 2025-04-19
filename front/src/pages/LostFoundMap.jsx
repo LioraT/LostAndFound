@@ -8,32 +8,6 @@ import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 
 
-
-/*const submitLostFoundItem = async (data) => {
-  try {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/lostfound`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem("token")}`, // if protected route
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to submit item');
-    }
-
-    const result = await response.json();
-    console.log("Item submitted:", result);
-    alert("Item successfully submitted!");
-  } catch (err) {
-    console.error("Submission error:", err);
-    alert("Error submitting item.");
-  }
-};*/
-
-
 // Placeholder icon (optional)
 const markerIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
@@ -66,14 +40,6 @@ export default function LostFoundMap() {
     setClickedPosition({ ...latlng, date: new Date() });
   };
 
-  /*
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };*/
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,18 +48,6 @@ export default function LostFoundMap() {
       [name]: value,
     }));
   };
-
-  /*const handleSubmit = async (e) => {
-    e.preventDefault();
-    const result = {
-      ...formData,
-      coordinates: clickedPosition,
-      user: localStorage.getItem("token") || "guest",
-    };
-    console.log("Submitted Lost/Found Item:", result);
-    setClickedPosition(null);
-    setFormData({ phone: "", item: "keys", description: "", isLost: true });
-  };*/
 
   const handleSubmit = async (e) => {
     e.preventDefault();
