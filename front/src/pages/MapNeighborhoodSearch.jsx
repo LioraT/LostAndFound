@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MapContainer, TileLayer, useMapEvents, Polygon, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, useMapEvents, Polygon, Marker, Popup, LayersControl } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import api from '../api/axios';
 import styles from '../styles/theme.module.css';
 import 'leaflet/dist/leaflet.css';
@@ -8,6 +9,8 @@ import { mapIcons } from '../utils/mapIcons';
 import L from 'leaflet';
 
 const API_URL = process.env.REACT_APP_API_URL;
+
+const { BaseLayer, Overlay } = LayersControl;
 
 function ClickHandler({ onClick }) {
   useMapEvents({
@@ -18,6 +21,37 @@ function ClickHandler({ onClick }) {
   });
   return null;
 }
+
+// Create custom cluster icons
+const createClusterCustomIcon = (type) => {
+  return function(cluster) {
+    const count = cluster.getChildCount();
+    const backgroundColor = type === 'lost' ? '#ff4444' : '#4CAF50';
+    const borderColor = type === 'lost' ? '#cc0000' : '#388E3C';
+    
+    return L.divIcon({
+      html: `
+        <div style="
+          background-color: ${backgroundColor};
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-weight: bold;
+          border: 3px solid ${borderColor};
+        ">
+          ${count}
+        </div>
+      `,
+      className: `marker-cluster-${type}`,
+      iconSize: L.point(36, 36),
+      iconAnchor: L.point(18, 18)
+    });
+  };
+};
 
 export default function MapNeighborhoodSearch() {
   const [searchParams] = useSearchParams();
@@ -108,39 +142,96 @@ export default function MapNeighborhoodSearch() {
         center={[32.0853, 34.7818]}
         zoom={13}
         style={{ height: '500px', width: '100%' }}>
-        <TileLayer
-          attribution='&copy; OpenStreetMap contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <LayersControl position="topright">
+          <BaseLayer checked name="OpenStreetMap">
+            <TileLayer
+              attribution='&copy; OpenStreetMap contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+          </BaseLayer>
+          
+          <BaseLayer name="Satellite">
+            <TileLayer
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              attribution='&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            />
+          </BaseLayer>
+
+          <Overlay checked name="Lost Items">
+            <MarkerClusterGroup
+              chunkedLoading
+              maxClusterRadius={60}
+              iconCreateFunction={createClusterCustomIcon('lost')}
+              key="lost-cluster"
+              zIndexOffset={1000} // Ensure lost items are above found items
+            >
+              {items
+                .filter(item => item.item_type.type === 'lost')
+                .map((item, index) => {
+                  const isHighlighted = item._id === itemId;
+                  const icon = isHighlighted ? mapIcons.lostHighlighted : mapIcons.lost;
+
+                  return (
+                    <Marker 
+                      key={`lost-${item._id || index}`}
+                      position={[item.location.coordinates[1], item.location.coordinates[0]]}
+                      icon={icon}
+                    >
+                      <Popup>
+                        <div>
+                          <strong>{item.title}</strong><br />
+                          Category: {item.item_category}<br />
+                          Status: {item.item_type.type.toUpperCase()}<br />
+                          Date: {new Date(item.item_type.dateReported).toLocaleDateString()}<br />
+                          Description: {item.item_description}<br />
+                          Contact: {item.owner_name} ({item.telephone})
+                        </div>
+                      </Popup>
+                    </Marker>
+                  );
+                })}
+            </MarkerClusterGroup>
+          </Overlay>
+
+          <Overlay checked name="Found Items">
+            <MarkerClusterGroup
+              chunkedLoading
+              maxClusterRadius={60}
+              iconCreateFunction={createClusterCustomIcon('found')}
+              key="found-cluster"
+              zIndexOffset={900} // Below lost items
+            >
+              {items
+                .filter(item => item.item_type.type === 'found')
+                .map((item, index) => {
+                  const isHighlighted = item._id === itemId;
+                  const icon = isHighlighted ? mapIcons.foundHighlighted : mapIcons.found;
+
+                  return (
+                    <Marker 
+                      key={`found-${item._id || index}`}
+                      position={[item.location.coordinates[1], item.location.coordinates[0]]}
+                      icon={icon}
+                    >
+                      <Popup>
+                        <div>
+                          <strong>{item.title}</strong><br />
+                          Category: {item.item_category}<br />
+                          Status: {item.item_type.type.toUpperCase()}<br />
+                          Date: {new Date(item.item_type.dateReported).toLocaleDateString()}<br />
+                          Description: {item.item_description}<br />
+                          Contact: {item.owner_name} ({item.telephone})
+                        </div>
+                      </Popup>
+                    </Marker>
+                  );
+                })}
+            </MarkerClusterGroup>
+          </Overlay>
+        </LayersControl>
         <ClickHandler onClick={handleMapClick} />
-        {/* zoom to the marker  */}
         <MapControl item={selectedItem} shouldZoom={shouldZoom} />
         {highlightedPolygon && <Polygon positions={highlightedPolygon} />}
-        {items.map((item, index) => {
-          const isHighlighted = item._id === itemId;
-          const icon = item.item_type.type === 'lost' 
-            ? (isHighlighted ? mapIcons.lostHighlighted : mapIcons.lost)
-            : (isHighlighted ? mapIcons.foundHighlighted : mapIcons.found);
-
-          return (
-            <Marker 
-              key={item._id || index}
-              position={[item.location.coordinates[1], item.location.coordinates[0]]}
-              icon={icon}
-            >
-              <Popup>
-                <div>
-                  <strong>{item.title}</strong><br />
-                  Category: {item.item_category}<br />
-                  Status: {item.item_type.type.toUpperCase()}<br />
-                  Date: {new Date(item.item_type.dateReported).toLocaleDateString()}<br />
-                  Description: {item.item_description}<br />
-                  Contact: {item.owner_name} ({item.telephone})
-                </div>
-              </Popup>
-            </Marker>
-          );
-        })}
       </MapContainer>
     </div>
 
