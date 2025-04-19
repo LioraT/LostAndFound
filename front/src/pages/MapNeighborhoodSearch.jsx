@@ -26,27 +26,9 @@ function ClickHandler({ onClick }) {
 const createClusterCustomIcon = (type) => {
   return function(cluster) {
     const count = cluster.getChildCount();
-    const backgroundColor = type === 'lost' ? '#ff4444' : '#4CAF50';
-    const borderColor = type === 'lost' ? '#cc0000' : '#388E3C';
-    
     return L.divIcon({
-      html: `
-        <div style="
-          background-color: ${backgroundColor};
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-weight: bold;
-          border: 3px solid ${borderColor};
-        ">
-          ${count}
-        </div>
-      `,
-      className: `marker-cluster-${type}`,
+      html: `<div class="${styles['cluster-icon-inner']}">${count}</div>`,
+      className: `${styles['marker-cluster']} ${styles[`marker-cluster-${type}`]}`,
       iconSize: L.point(36, 36),
       iconAnchor: L.point(18, 18)
     });

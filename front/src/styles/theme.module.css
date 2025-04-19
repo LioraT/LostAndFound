@@ -836,4 +836,39 @@
   }
   
 
-      
+  .marker-cluster {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .marker-cluster-lost {
+    background-color: rgba(255, 68, 68, 0.8);
+    border: 3px solid rgba(204, 0, 0, 0.8);
+  }
+  
+  .marker-cluster-found {
+    background-color: rgba(76, 175, 80, 0.8);
+    border: 3px solid rgba(56, 142, 60, 0.8);
+  }
+  
+  .cluster-icon-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 50%;
+  }
