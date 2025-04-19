@@ -36,7 +36,7 @@ export default function MapNeighborhoodSearch() {
     if (itemId) {
       const fetchItem = async () => {
         try {
-          const { data } = await api.get(`/items/${itemId}`);
+          const { data } = await api.get(`/items/id/${itemId}`);
           setSelectedItem(data);
           setItems([data]); // Add the item to the items array
           

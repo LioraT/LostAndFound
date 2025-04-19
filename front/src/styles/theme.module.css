@@ -518,6 +518,31 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   }
 
+  .mapHint {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .loadingBox {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 6px 15px;
+    border-radius: 6px;
+    z-index: 1000;
+    font-style: italic;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+
   .infoBox {
     margin-top: 10px;
     padding: 10px;

@@ -20,7 +20,6 @@ router.get('/', verifyToken, async (req, res) => {
 router.get('/area', verifyToken, async (req, res) => {
   try {
     const { swLat, swLng, neLat, neLng } = req.query;
-
     const items = await Item.find({
       location: {
         $geoWithin: {
@@ -62,7 +61,7 @@ router.post('/', verifyToken, async (req, res) => {
 });
 
 // Get a single item
-router.get('/:id', verifyToken, async (req, res) => {
+router.get('/id/:id', verifyToken, async (req, res) => {
   try {
     const item = await Item.findById(req.params.id)
       .populate('owner', 'first_name last_name email');
@@ -119,6 +118,36 @@ router.put('/', verifyToken, async (req, res) => {
   } catch (error) {
     console.error('Error creating item:', error);
     res.status(400).json({ message: error.message });
+  }
+});
+
+// 📍 Get items nearby within a radius
+router.get('/nearby', verifyToken, async (req, res) => {
+  console.log("hi")
+  const { lat, lng, radius } = req.query;
+   
+  if (!lat || !lng || !radius) {
+    return res.status(400).json({ error: "Missing lat, lng or radius" });
+  }
+  console.log("items/nearby",`lat= ${lat} lng= ${lng} radius= ${radius}` )
+  try {
+    const items = await Item.find({
+      location: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [parseFloat(lng), parseFloat(lat)]
+          },
+          $maxDistance: parseFloat(radius)
+        }
+      }
+    });
+
+    res.json(items);
+  } catch (err) {
+    console.error("Error fetching nearby items:", err);
+    console.error("Geo query error:", err); // ✅ This helps
+    res.status(500).json({ error: "Server error" });
   }
 });
 
