@@ -6,7 +6,7 @@ const User = require('../models/user');
 
 
 // Get all items
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', verifyToken(), async (req, res) => {
   try {
     const items = await Item.find();
     res.json(items);
@@ -17,7 +17,7 @@ router.get('/', verifyToken, async (req, res) => {
 });
 
 // Get items within a specific area (for map bounds)
-router.get('/area', verifyToken, async (req, res) => {
+router.get('/area', verifyToken(), async (req, res) => {
   try {
     const { swLat, swLng, neLat, neLng } = req.query;
     const items = await Item.find({
@@ -38,7 +38,7 @@ router.get('/area', verifyToken, async (req, res) => {
 });
 
 // Create a new item (protected route)
-router.post('/', verifyToken, async (req, res) => {
+router.post('/', verifyToken(), async (req, res) => {
   try {
     // Get the user first
     const user = await User.findById(req.userId);
@@ -61,7 +61,7 @@ router.post('/', verifyToken, async (req, res) => {
 });
 
 // Get a single item
-router.get('/id/:id', verifyToken, async (req, res) => {
+router.get('/id/:id', verifyToken(), async (req, res) => {
   try {
     const item = await Item.findById(req.params.id)
       .populate('owner', 'first_name last_name email');
@@ -75,7 +75,7 @@ router.get('/id/:id', verifyToken, async (req, res) => {
 });
 
 // Delete an item (protected route)
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id', verifyToken(), async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
     if (!item) {
@@ -99,7 +99,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
 });
 
 // ✅ NEW: put item in the DB by form
-router.put('/', verifyToken, async (req, res) => {
+router.put('/', verifyToken(), async (req, res) => {
   try {
     // Get the user first
     const user = await User.findById(req.userId);
@@ -122,7 +122,7 @@ router.put('/', verifyToken, async (req, res) => {
 });
 
 // 📍 Get items nearby within a radius
-router.get('/nearby', verifyToken, async (req, res) => {
+router.get('/nearby', verifyToken(), async (req, res) => {
   console.log("hi")
   const { lat, lng, radius } = req.query;
    
