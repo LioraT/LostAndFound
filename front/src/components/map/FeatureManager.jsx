@@ -32,7 +32,9 @@ export default function FeatureManager() {
           onClick={() => setMode("heatmap")}
         >
           🌡️ Heatmap
-
+          </button>
+          <button
+          
           className={mode === "add" ? styles.activeButton : ""}
           onClick={() => setMode("add")}
         >
