@@ -3,6 +3,7 @@ const router = express.Router();
 const Item = require('../models/item');
 const verifyToken = require('../middleware/authMiddleware');
 const User = require('../models/user');
+const debug = require('../utils/debug');
 
 
 // Get all items
@@ -123,13 +124,12 @@ router.put('/', verifyToken(), async (req, res) => {
 
 // 📍 Get items nearby within a radius
 router.get('/nearby', verifyToken(), async (req, res) => {
-  console.log("hi")
   const { lat, lng, radius } = req.query;
    
   if (!lat || !lng || !radius) {
     return res.status(400).json({ error: "Missing lat, lng or radius" });
   }
-  console.log("items/nearby",`lat= ${lat} lng= ${lng} radius= ${radius}` )
+  debug.log("items/nearby",`lat= ${lat} lng= ${lng} radius= ${radius}` )
   try {
     const items = await Item.find({
       location: {

@@ -15,13 +15,12 @@
  
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGODB_URI;
-console.log(MONGO_URI);
 
 async function startServer() {
   try {
     await mongoose.connect(MONGO_URI, {});
       
-    console.log('✅ Connected to MongoDB');
+    console.log('✅ Connected to MongoDB at', MONGO_URI);
 
     app.use('/auth', authRoutes);
     app.use('/protected', protectedRoute);
