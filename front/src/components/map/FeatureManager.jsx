@@ -4,6 +4,7 @@ import SearchByNeighborhood from "../features/SearchByNeighborhood";
 import SearchByRadius from "../features/SearchByRadius";
 import ItemZoom from "../features/ItemZoom";
 import styles from "../../styles/theme.module.css";
+import AddItemFeature from "../features/AddItemFeature";
 
 export default function FeatureManager() {
   const [mode, setMode] = useState("neighborhood");
@@ -24,12 +25,22 @@ export default function FeatureManager() {
         >
           📍 Radius
         </button>
+        <button
+          className={mode === "add" ? styles.activeButton : ""}
+          onClick={() => setMode("add")}
+        >
+          ➕ Add Item
+        </button>
       </div>
 
       {/* Feature logic */}
       <ItemZoom /> {/* Always render ItemZoom */}
       {mode === "neighborhood" && <SearchByNeighborhood />}
       {mode === "radius" && <SearchByRadius />}
+      {mode === "add" && <AddItemFeature />}
     </>
   );
 }
+
+
+
