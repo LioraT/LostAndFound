@@ -86,6 +86,18 @@ export default function Sidebar() {
         <span className={styles.sidebarLabel}>Add item</span>
       </NavLink>
 
+      
+      <NavLink
+        to="/map-tools"
+        className={({ isActive }) =>
+          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
+        }
+      >
+        <FaMap className={styles.sidebarIcon} />
+        <span className={styles.sidebarLabel}>Map Tools</span>
+      </NavLink>
+
+
       <NavLink
         to="/search_neighb"
         className={({ isActive }) =>

@@ -872,3 +872,38 @@
     font-size: 14px;
     border-radius: 50%;
   }
+
+  .featureSidebar {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: white;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .featureSidebar button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    background: #f0f0f0;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  
+  .featureSidebar button:hover {
+    background: #e0e0e0;
+  }
+  
+  .activeButton {
+    background-color: #4a90e2;
+    color: white;
+  }
+  

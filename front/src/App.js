@@ -16,6 +16,8 @@ import MapRadiusSearch from "./pages/MapRadiusSearch";
 import LostFoundMap from "./pages/LostFoundMap";
 import NotFound from "./base_pages/NotFound";
 
+import MapToolsPage from "./pages/MapToolsPage";
+
 
 function App() {
   return (
@@ -70,7 +72,17 @@ function App() {
               </ProtectedRoute>
             }
           />
-          MapRadiusSearch
+           
+          <Route 
+            path="map-tools" 
+            element= {
+              <ProtectedRoute>
+              <MapToolsPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          
           <Route
             path="search_neighb"
             element={
