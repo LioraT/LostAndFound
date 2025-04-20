@@ -2,6 +2,7 @@
  const bcrypt = require('bcrypt');
  const router = express.Router();
  const User = require("../models/user");
+ const debug = require('../utils/debug');
  
  const verifyToken = require("../middleware/authMiddleware");
  const adminOnly = require("../middleware/adminOnly");
@@ -61,7 +62,7 @@
     const search = req.query.search || "";
     const limit = parseInt(req.query.limit) || 12;
     const skip = parseInt(req.query.skip) || 0;
-    console.log("in useres", limit, skip);
+    debug.log("in users", limit, skip);
     try {
       const filter = {
         $or: [

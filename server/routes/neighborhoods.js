@@ -2,6 +2,7 @@
  const router = express.Router();
  const verifyToken = require("../middleware/authMiddleware");
  const Item = require("../models/item");
+ const debug = require('../utils/debug');
  //const adminOnly = require("../middleware/adminOnly");
 // const mongoose = require('mongoose');
 const Neighborhood = require("../models/neighborhoodModel"); // Adjust path as needed
@@ -29,7 +30,8 @@ router.post("/find-by-coordinates",verifyToken(), async (req, res) => {
     if (!neighborhood) {
       return res.status(404).json({ error: "Neighborhood not found" });
     }
-    console.log("neg",neighborhood.properties.shemshchun);
+    const ne_name = debug.hebstr(neighborhood.properties.shemshchun);
+    debug.log("neighborhood: ",ne_name);
     return res.json({ shemshchun: neighborhood.properties.shemshchun }); 
   } catch (err) {
     console.error("Error finding neighborhood:", err);
@@ -70,7 +72,7 @@ router.get('/by-neighborhood/:shemshchun', verifyToken(), async (req, res) => {
         }
       }
     });
-console.log("itemes: ",items);
+    //debug.log("items: ",items);
     res.json(items);
   } catch (err) {
     console.error("Error fetching items by neighborhood:", err);

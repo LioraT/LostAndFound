@@ -17,10 +17,11 @@ const verifyToken = () => {
           .replace(/\)$/, '');                       // remove trailing ")"
     }
 
-    debug.log ("verifyToken registred from: ", definedAt);
+    // debug.log ("verifyToken registred from: ", definedAt);
     return (req, res, next) => {
         if (process.env.DEBUG_MODE === 'true') {
-            console.log(`🔐 [${req.method} ${req.originalUrl}] route defined at ${definedAt}`);
+	        const origUrl = debug.heburl(req.originalUrl);
+            debug.log(`🔐 [${req.method} ${origUrl}] route defined at ${definedAt}`);
         }
         const token = req.header('Authorization');
         if (!token) { 
