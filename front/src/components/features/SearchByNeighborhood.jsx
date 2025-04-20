@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useMap } from "../map/MapProvider";
 import { useMapEvents, Marker, Polygon, Popup } from "react-leaflet";
 import api from "../../api/axios";
-import L from "leaflet";
 import { mapIcons } from "../../utils/mapIcons";
 import styles from "../../styles/theme.module.css";
 
@@ -72,9 +71,11 @@ export default function SearchByNeighborhood() {
         />
       )}
 
-      {items.map((item, i) => (
+      {/*  was {items.map((item, i) => ( */}
+      {items.map((item) => (
         <Marker
-          key={i}
+        //was key={i}
+          key={item._id}
           position={[item.location.coordinates[1], item.location.coordinates[0]]}
           icon={mapIcons[item.item_type?.type || 'lost']}
         >

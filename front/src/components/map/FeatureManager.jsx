@@ -2,6 +2,7 @@
 import { useState } from "react";
 import SearchByNeighborhood from "../features/SearchByNeighborhood";
 import SearchByRadius from "../features/SearchByRadius";
+import ItemZoom from "../features/ItemZoom";
 import styles from "../../styles/theme.module.css";
 
 export default function FeatureManager() {
@@ -26,6 +27,7 @@ export default function FeatureManager() {
       </div>
 
       {/* Feature logic */}
+      <ItemZoom /> {/* Always render ItemZoom */}
       {mode === "neighborhood" && <SearchByNeighborhood />}
       {mode === "radius" && <SearchByRadius />}
     </>

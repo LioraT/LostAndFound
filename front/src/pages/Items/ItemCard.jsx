@@ -25,7 +25,7 @@ const ItemCard = ({ item, onDelete, isOwner }) => {
         {item.location && item.location.coordinates && (
           <div 
             className={styles.mapPreviewContainer}
-            onClick={() => navigate(`/search_neighb?item=${item._id}&zoom=true`)}
+            onClick={() => navigate(`/map-tools?item=${item._id}&zoom=true`)}
             style={{ cursor: 'pointer' }}
           >
             <MapContainer
