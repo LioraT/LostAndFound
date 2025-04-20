@@ -2,6 +2,7 @@
 import { useState } from "react";
 import SearchByNeighborhood from "../features/SearchByNeighborhood";
 import SearchByRadius from "../features/SearchByRadius";
+import HeatmapView from "../features/HeatmapView";
 import ItemZoom from "../features/ItemZoom";
 import styles from "../../styles/theme.module.css";
 
@@ -24,12 +25,19 @@ export default function FeatureManager() {
         >
           📍 Radius
         </button>
+        <button
+          className={mode === "heatmap" ? styles.activeButton : ""}
+          onClick={() => setMode("heatmap")}
+        >
+          🌡️ Heatmap
+        </button>
       </div>
 
       {/* Feature logic */}
-      <ItemZoom /> {/* Always render ItemZoom */}
+      {<ItemZoom />} {/* Always render ItemZoom */}
       {mode === "neighborhood" && <SearchByNeighborhood />}
       {mode === "radius" && <SearchByRadius />}
+      {mode === "heatmap" && <HeatmapView />}
     </>
   );
 }
