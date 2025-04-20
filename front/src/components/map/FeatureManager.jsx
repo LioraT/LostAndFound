@@ -5,6 +5,7 @@ import SearchByRadius from "../features/SearchByRadius";
 import HeatmapView from "../features/HeatmapView";
 import ItemZoom from "../features/ItemZoom";
 import styles from "../../styles/theme.module.css";
+import AddItemFeature from "../features/AddItemFeature";
 
 export default function FeatureManager() {
   const [mode, setMode] = useState("neighborhood");
@@ -26,10 +27,17 @@ export default function FeatureManager() {
           📍 Radius
         </button>
         <button
+
           className={mode === "heatmap" ? styles.activeButton : ""}
           onClick={() => setMode("heatmap")}
         >
           🌡️ Heatmap
+
+          className={mode === "add" ? styles.activeButton : ""}
+          onClick={() => setMode("add")}
+        >
+          ➕ Add Item
+
         </button>
       </div>
 
@@ -37,7 +45,14 @@ export default function FeatureManager() {
       {<ItemZoom />} {/* Always render ItemZoom */}
       {mode === "neighborhood" && <SearchByNeighborhood />}
       {mode === "radius" && <SearchByRadius />}
+
       {mode === "heatmap" && <HeatmapView />}
+
+      {mode === "add" && <AddItemFeature />}
+
     </>
   );
 }
+
+
+
