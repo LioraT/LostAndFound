@@ -1,0 +1,250 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2025-04-20T14:37:30Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/96641455",
+        "addr:city": "תל אביב-יפו",
+        "amenity": "police",
+        "building": "yes",
+        "level": "-1",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.7893088,
+          32.0804788
+        ]
+      },
+      "id": "way/96641455"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/97522465",
+        "amenity": "police",
+        "building": "yes",
+        "name": "מרחב ירקון",
+        "name:en": "Yarkon Region",
+        "name:he": "מרחב ירקון",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.8359174,
+          32.1081002
+        ]
+      },
+      "id": "way/97522465"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/200800222",
+        "amenity": "police",
+        "building": "yes",
+        "building:colour": "#222222",
+        "building:levels": "9",
+        "building:material": "glass",
+        "height": "33",
+        "name": "תחנת שר\"ת",
+        "name:he": "תחנת שר\"ת",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.7850195,
+          32.0611542
+        ]
+      },
+      "id": "way/200800222"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/265984618",
+        "amenity": "police",
+        "building": "yes",
+        "building:levels": "7",
+        "height": "25.8",
+        "name": "משטרת ישראל - מחוז תל אביב",
+        "name:en": "Israel police - Tel-Aviv district",
+        "name:he": "משטרת ישראל - מחוז תל אביב",
+        "name:ru": "Полиция - Тель-Авивский округ",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.7623009,
+          32.0537485
+        ]
+      },
+      "id": "way/265984618"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1009728923",
+        "amenity": "police",
+        "name": "תחנת לב תל אביב",
+        "name:en": "Lev Tel Aviv police station",
+        "name:he": "תחנת לב תל אביב",
+        "opening_hours": "Su-Th 07:30-22:00; Fr 07:30-14:00",
+        "operator": "משטרת ישראל",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.7969731,
+          32.0821181
+        ]
+      },
+      "id": "way/1009728923"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1180784288",
+        "alt_name": "מרכז שיטור קהילתי",
+        "alt_name:he": "מרכז שיטור קהילתי",
+        "amenity": "police",
+        "building": "yes",
+        "building:levels": "1",
+        "name": "מבנה 10",
+        "name:en": "Building 10",
+        "name:he": "מבנה 10",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.7742698,
+          32.0978359
+        ]
+      },
+      "id": "way/1180784288"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1200567485",
+        "amenity": "police",
+        "name": "מרכז שיטור קהילתי ובסיס הפעלה מתנדבים נאות אפקה",
+        "name:en": "Neot Afeka Community police",
+        "name:he": "מרכז שיטור קהילתי ובסיס הפעלה מתנדבים נאות אפקה"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.8230146,
+          32.1193401
+        ]
+      },
+      "id": "node/1200567485"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2506041488",
+        "amenity": "police",
+        "seamark:building:function": "water-police_station",
+        "seamark:type": "building"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.7684671,
+          32.0869287
+        ]
+      },
+      "id": "node/2506041488"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4490164489",
+        "amenity": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.7516554,
+          32.0546404
+        ]
+      },
+      "id": "node/4490164489"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5601422197",
+        "amenity": "police",
+        "name": "Police",
+        "name:en": "Police",
+        "wheelchair": "yes"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.7791568,
+          32.0606847
+        ]
+      },
+      "id": "node/5601422197"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7043391565",
+        "amenity": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.8047028,
+          32.1194052
+        ]
+      },
+      "id": "node/7043391565"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8640011596",
+        "amenity": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.7694679,
+          32.0549243
+        ]
+      },
+      "id": "node/8640011596"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/10830975172",
+        "amenity": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.7645821,
+          32.0734178
+        ]
+      },
+      "id": "node/10830975172"
+    }
+  ]
+}

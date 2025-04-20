@@ -8,6 +8,7 @@
  const protectedRoute = require('./routes/protectedRoute');
  const itemsRoutes = require('./routes/items');
  const neighborhoods = require('./routes/neighborhoods');
+ const policestations = require('./routes/policeStations');
  const devRoutes = require('./routes/devRoute');
  app.use(cors());
  app.use(express.json());
@@ -26,6 +27,7 @@ async function startServer() {
     app.use('/protected', protectedRoute);
     app.use('/items', itemsRoutes);
     app.use('/neighborhoods', neighborhoods);
+    app.use('/policestations', policestations);
     
     // Only use dev routes in development
     if (process.env.NODE_ENV === 'development') {
