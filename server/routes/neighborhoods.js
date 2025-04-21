@@ -57,22 +57,51 @@ router.get('/by-name/:shemshchun', verifyToken(), async (req, res) => {
   }
 });
 
-// Get items within neighborhood polygon
+// Get items within neighborhood polygon (with filters)
 router.get('/by-neighborhood/:shemshchun', verifyToken(), async (req, res) => {
   const { shemshchun } = req.params;
+  const {
+    item_category,
+    item_type,
+    resolved,
+    keywords
+  } = req.query;
 
   try {
     const neighborhood = await Neighborhood.findOne({ "properties.shemshchun": shemshchun });
-    if (!neighborhood) return res.status(404).json({ error: "Neighborhood not found" });
+    if (!neighborhood) {
+      return res.status(404).json({ error: "Neighborhood not found" });
+    }
 
-    const items = await Item.find({
+    const query = {
       location: {
         $geoWithin: {
           $geometry: neighborhood.geometry
         }
       }
-    });
-    //debug.log("items: ",items);
+    };
+
+    if (item_category) {
+      query.item_category = item_category;
+    }
+
+    if (item_type) {
+      query["item_type.type"] = item_type;
+    }
+
+    if (resolved === "true" || resolved === "false") {
+      query["item_type.resolved"] = resolved === "true";
+    }
+
+    if (keywords) {
+      const regex = new RegExp(keywords, "i");
+      query.$or = [
+        { title: { $regex: regex } },
+        { item_description: { $regex: regex } }
+      ];
+    }
+
+    const items = await Item.find(query);
     res.json(items);
   } catch (err) {
     console.error("Error fetching items by neighborhood:", err);
