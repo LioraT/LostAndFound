@@ -1,17 +1,21 @@
 // components/features/AddItemFeature.jsx
-
 import { useState } from "react";
-import { Marker, Popup, useMapEvents, useMap } from "react-leaflet";
+import { Marker, Popup, useMapEvents } from "react-leaflet";
+import L from "leaflet";
 import styles from "../../styles/theme.module.css";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../api/axios";
 import { mapIcons } from "../../utils/mapIcons";
 
+// const markerIcon = new L.Icon({ <==== moved to utils/mapIcons.js
+//   iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
+//   iconSize: [25, 41],
+//   iconAnchor: [12, 41],
+// });
+
 export default function AddItemFeature() {
   const [clickedPosition, setClickedPosition] = useState(null);
-  const [matchItems, setMatchItems] = useState([]);
   const { token, user } = useAuth();
-  const map = useMap();
 
   const [formData, setFormData] = useState({
     telephone: "",
@@ -64,36 +68,21 @@ export default function AddItemFeature() {
 
     try {
       const res = await api.post("/items/", data);
+      console.log("Submitted:", res.data);
       alert("Item logged successfully.");
-
-      const matchRes = await api.post("/items/matching", {
-        type: formData.item_type,
-        category: formData.item_category,
-        coordinates: [clickedPosition.lng, clickedPosition.lat],
-        radius: 1500,
-      });
-
-      setMatchItems(matchRes.data);
-
-      if (matchRes.data.length) {
-        const [lng, lat] = matchRes.data[0].location.coordinates;
-        map.flyTo([lat, lng], 15);
-      }
-
       setClickedPosition(null);
+      setFormData({
+        telephone: "",
+        item_category: "keys",
+        item_description: "",
+        item_type: "lost",
+        dateReported: new Date().toISOString().slice(0, 16),
+        address: "",
+      });
     } catch (err) {
-      console.error("Error submitting item:", err);
+      console.error("Error:", err);
       alert("Failed to submit item.");
     }
-
-    setFormData({
-      telephone: "",
-      item_category: "keys",
-      item_description: "",
-      item_type: "lost",
-      dateReported: new Date().toISOString().slice(0, 16),
-      address: "",
-    });
   };
 
   return (
@@ -102,7 +91,11 @@ export default function AddItemFeature() {
         <Marker position={[clickedPosition.lat, clickedPosition.lng]} icon={mapIcons.markerIcon}>
           <Popup>
             <form onSubmit={handleSubmit} className={styles.popupForm}>
-              <p><strong>Coordinates:</strong><br />{clickedPosition.lat.toFixed(5)}, {clickedPosition.lng.toFixed(5)}</p>
+              <p>
+                <strong>Coordinates:</strong>
+                <br />
+                {clickedPosition.lat.toFixed(5)}, {clickedPosition.lng.toFixed(5)}
+              </p>
 
               <label>
                 Date:
@@ -184,20 +177,6 @@ export default function AddItemFeature() {
           </Popup>
         </Marker>
       )}
-
-      {matchItems.map((item) => (
-        <Marker
-          key={item._id}
-          position={[item.location.coordinates[1], item.location.coordinates[0]]}
-          icon={mapIcons[item.item_type?.type || "lost"]}
-        >
-          <Popup>
-            <strong>{item.item_category}</strong><br />
-            {item.item_description}<br />
-            {new Date(item.item_type?.dateReported).toLocaleString()}
-          </Popup>
-        </Marker>
-      ))}
     </>
   );
 }
