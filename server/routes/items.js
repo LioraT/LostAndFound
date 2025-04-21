@@ -122,34 +122,64 @@ router.put('/', verifyToken(), async (req, res) => {
   }
 });
 
-// 📍 Get items nearby within a radius
+// 📍 GET /items/nearby
 router.get('/nearby', verifyToken(), async (req, res) => {
-  const { lat, lng, radius } = req.query;
-   
-  if (!lat || !lng || !radius) {
-    return res.status(400).json({ error: "Missing lat, lng or radius" });
-  }
-  debug.log("items/nearby",`lat= ${lat} lng= ${lng} radius= ${radius}` )
-  try {
-    const items = await Item.find({
-      location: {
-        $near: {
-          $geometry: {
-            type: "Point",
-            coordinates: [parseFloat(lng), parseFloat(lat)]
-          },
-          $maxDistance: parseFloat(radius)
-        }
-      }
-    });
+  const {
+    lat,
+    lng,
+    radius = 1500,
+    item_category,
+    item_type,
+    resolved,
+    keywords
+  } = req.query;
 
+  if (!lat || !lng) {
+    return res.status(400).json({ error: "Missing lat or lng" });
+  }
+
+  // ✅ Build the query dynamically
+  const query = {
+    location: {
+      $near: {
+        $geometry: {
+          type: "Point",
+          coordinates: [parseFloat(lng), parseFloat(lat)],
+        },
+        $maxDistance: parseFloat(radius),
+      }
+    }
+  };
+
+  if (item_category) {
+    query.item_category = item_category;
+  }
+
+  if (item_type) {
+    query["item_type.type"] = item_type;
+  }
+
+  if (resolved === "true" || resolved === "false") {
+    query["item_type.resolved"] = resolved === "true";
+  }
+
+  if (keywords) {
+    const regex = new RegExp(keywords, "i");
+    query.$or = [
+      { title: { $regex: regex } },
+      { item_description: { $regex: regex } }
+    ];
+  }
+
+  try {
+    const items = await Item.find(query);
     res.json(items);
   } catch (err) {
     console.error("Error fetching nearby items:", err);
-    console.error("Geo query error:", err); // ✅ This helps
     res.status(500).json({ error: "Server error" });
   }
 });
+
 
 //
 // POST /items/matching

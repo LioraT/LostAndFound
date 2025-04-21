@@ -875,17 +875,16 @@
 
   .featureSidebar {
     position: absolute;
-    /* bottom: 20px; */
-    top: 100px;
-    left: 100px;
+    top: 200px;
+    left: 5px;
     z-index: 1000;
-    background: white;
-    padding: 10px;
-    border-radius: 12px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
     display: flex;
     flex-direction: column;
     gap: 10px;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
   }
   
   .featureSidebar button {
@@ -908,3 +907,22 @@
     color: white;
   }
   
+  .filterPanel {
+    position: absolute;
+    top: 5px;
+    left: 5px; /* Moved right so it doesn't overlap the sidebar */
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    min-width: 250px;
+  }
+  
+  .filterPanel input[type="number"] {
+    width: 100%;
+    padding: 4px;
+  }

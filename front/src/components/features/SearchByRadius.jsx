@@ -19,7 +19,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-export default function SearchByRadius() {
+export default function SearchByRadius({ filter }) {
   const { mapRef } = useMap();
   const [items, setItems] = useState([]);
   const [center, setCenter] = useState([32.0853, 34.7818]); // Tel Aviv default
@@ -32,12 +32,17 @@ export default function SearchByRadius() {
 
     const fetchNearbyItems = async () => {
       setLoading(true);
+      console.log("fetchNearbyItems",filter);
       try {
-        const { data } = await api.get(`/items/nearby`, {
+        const { data } = await api.get("/items/nearby", {
           params: {
             lng: center[1],
             lat: center[0],
-            radius: 1500
+            radius: filter.radius || 1500,
+            item_category: filter.item_category || undefined,
+            item_type: filter.item_type || undefined,
+            resolved: filter.resolved || undefined,
+            keywords: filter.keywords || undefined
           }
         });
         setItems(data);

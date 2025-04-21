@@ -5,7 +5,7 @@ import api from "../../api/axios";
 import { mapIcons } from "../../utils/mapIcons";
 import styles from "../../styles/theme.module.css";
 
-export default function SearchByNeighborhood() {
+export default function SearchByNeighborhood({ filter }) {
   const { mapRef } = useMap();
 
   const [neighborhoodName, setNeighborhoodName] = useState('');
@@ -48,7 +48,15 @@ export default function SearchByNeighborhood() {
           setHighlightedPolygon(geometry.coordinates[0]);
 
           // Step 3: Get items in neighborhood
-          const itemsRes = await api.get(`/neighborhoods/by-neighborhood/${shemshchun}`);
+          const itemsRes = await api.get(`/neighborhoods/by-neighborhood/${shemshchun}`, {
+            params: {
+              item_category: filter.item_category || undefined,
+              item_type: filter.item_type || undefined,
+              resolved: filter.resolved || undefined,
+              keywords: filter.keywords || undefined
+            }
+          });
+          
           setItems(itemsRes.data || []);
 
         } catch (err) {
