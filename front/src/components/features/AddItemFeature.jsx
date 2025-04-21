@@ -5,12 +5,13 @@ import L from "leaflet";
 import styles from "../../styles/theme.module.css";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../api/axios";
+import { mapIcons } from "../../utils/mapIcons";
 
-const markerIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
+// const markerIcon = new L.Icon({ <==== moved to utils/mapIcons.js
+//   iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
+//   iconSize: [25, 41],
+//   iconAnchor: [12, 41],
+// });
 
 export default function AddItemFeature() {
   const [clickedPosition, setClickedPosition] = useState(null);
@@ -87,7 +88,7 @@ export default function AddItemFeature() {
   return (
     <>
       {clickedPosition && (
-        <Marker position={[clickedPosition.lat, clickedPosition.lng]} icon={markerIcon}>
+        <Marker position={[clickedPosition.lat, clickedPosition.lng]} icon={mapIcons.markerIcon}>
           <Popup>
             <form onSubmit={handleSubmit} className={styles.popupForm}>
               <p>
