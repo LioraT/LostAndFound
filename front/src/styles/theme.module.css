@@ -543,13 +543,13 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   }
 
-  .infoBox {
+  /* .infoBox {
     margin-top: 10px;
     padding: 10px;
     font-size: 16px;
     background-color: #dccdcd;
     border-left: 4px solid #2196f3;
-  }
+  } */
 /*not found */
 .notFoundContainer {
     padding: 2rem;
@@ -907,6 +907,7 @@
     color: white;
   }
   
+
   .filterPanel {
     position: absolute;
     top: 5px;
@@ -926,3 +927,111 @@
     width: 100%;
     padding: 4px;
   }
+
+  .cluster-icon {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 14px;
+    color: white;
+    box-shadow: 0 0 0 2px white;
+  }
+
+  .cluster-lost {
+    background-color: rgba(255, 0, 0, 0.6);
+  }
+
+  .cluster-found {
+    background-color: rgba(0, 255, 0, 0.6);
+  }
+
+  .custom-marker-cluster {
+    background: none;
+    border: none;
+  }
+
+  /* Override default cluster styles */
+  .marker-cluster-small,
+  .marker-cluster-medium,
+  .marker-cluster-large {
+    background-color: transparent !important;
+  }
+
+  .marker-cluster-small div,
+  .marker-cluster-medium div,
+  .marker-cluster-large div {
+    background-color: transparent !important;
+  }
+
+  /* Cluster styles */
+  .custom-cluster-icon {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+  }
+
+  /* Item popup styles */
+  .itemPopup {
+    padding: 10px;
+    max-width: 200px;
+  }
+
+  .itemPopup strong {
+    color: #333;
+    font-size: 16px;
+  }
+
+  .itemCategory {
+    color: #666;
+    font-style: italic;
+  }
+
+  .itemDate {
+    color: #888;
+    font-size: 12px;
+  }
+
+  /* Custom cluster hover effect */
+  .custom-cluster-icon:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+  }
+
+  /* Ensure clusters appear above the map */
+  :global(.marker-cluster) {
+    z-index: 450 !important;
+    position: relative;
+  }
+
+  /* Custom cluster styles */
+  :global(.marker-cluster-found) {
+    background-color: rgba(76, 175, 80, 0.6);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  }
+
+  :global(.marker-cluster-lost) {
+    background-color: rgba(255, 68, 68, 0.6);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Override default cluster styles */
+  :global(.leaflet-marker-icon.leaflet-div-icon) {
+    background: transparent;
+    border: none;
+  }
+
+  /* Ensure proper stacking context */
+  :global(.leaflet-marker-pane) {
+    z-index: 400;
+  }
+
+  :global(.leaflet-popup-pane) {
+    z-index: 500;
+  }
+

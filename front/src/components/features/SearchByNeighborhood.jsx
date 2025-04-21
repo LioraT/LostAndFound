@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useMap } from "../map/MapProvider";
-import { useMapEvents, Marker, Polygon, Popup } from "react-leaflet";
+import { useMapEvents, Polygon } from "react-leaflet";
 import api from "../../api/axios";
-import { mapIcons } from "../../utils/mapIcons";
 import styles from "../../styles/theme.module.css";
+import ItemClusterGroup from './ItemClusterGroup';
 
 export default function SearchByNeighborhood({ filter }) {
   const { mapRef } = useMap();
@@ -75,35 +75,29 @@ export default function SearchByNeighborhood({ filter }) {
       {highlightedPolygon && (
         <Polygon
           positions={highlightedPolygon.map(([lng, lat]) => [lat, lng])}
-          pathOptions={{ color: 'blue' }}
+          pathOptions={{ 
+            color: 'blue',
+            weight: 2,
+            fillOpacity: 0.1 
+          }}
         />
       )}
 
-      {/*  was {items.map((item, i) => ( */}
-      {items.map((item) => (
-        <Marker
-        //was key={i}
-          key={item._id}
-          position={[item.location.coordinates[1], item.location.coordinates[0]]}
-          icon={mapIcons[item.item_type?.type || 'lost']}
-        >
-          <Popup>
-            <strong>{item.item_type?.type?.toUpperCase()}</strong><br />
-            {item.item_description}<br />
-            {new Date(item.item_type?.dateReported).toLocaleString()}
-          </Popup>
-        </Marker>
-      ))}
+      {items.length > 0 && <ItemClusterGroup items={items} />}
 
-      <div className={styles.infoBox}>
+      {/* <div className={styles.infoBox}>
         {neighborhoodName && (
           <>
             <h3>{neighborhoodName}</h3>
             <p>Items found: {items.length}</p>
+            <p>
+              Lost items: {items.filter(item => item.item_type?.type === 'lost').length}<br />
+              Found items: {items.filter(item => item.item_type?.type === 'found').length}
+            </p>
           </>
         )}
         {error && <p className={styles.error}>{error}</p>}
-      </div>
+      </div> */}
     </>
   );
 }

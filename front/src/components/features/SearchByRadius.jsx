@@ -1,26 +1,14 @@
-// components/features/SearchByRadius.jsx
 import { useEffect, useState } from "react";
 import { useMap } from "../map/MapProvider";
-import { useMapEvents, Marker, Circle, Popup } from "react-leaflet";
+import { useMapEvents, Circle } from "react-leaflet";
 import api from "../../api/axios";
 import styles from "../../styles/theme.module.css";
-import L from "leaflet";
 import { mapIcons } from "../../utils/mapIcons";
-
-// Setup marker icon override
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerIcon2x,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-});
+import ItemClusterGroup from './ItemClusterGroup';
 
 export default function SearchByRadius({ filter }) {
-  const { mapRef } = useMap();
+  //const { mapRef } = useMap();
+
   const [items, setItems] = useState([]);
   const [center, setCenter] = useState([32.0853, 34.7818]); // Tel Aviv default
   const [loading, setLoading] = useState(false);
@@ -89,24 +77,10 @@ export default function SearchByRadius({ filter }) {
         />
       )}
 
-      {items.map((item) => (
-        <Marker
-          key={item._id}
-          position={[
-            item.location.coordinates[1],
-            item.location.coordinates[0]
-          ]}
-          icon={mapIcons[item.item_type?.type || "lost"]}
-        >
-          <Popup>
-            <strong>{item.item_category}</strong>
-            <br />
-            {new Date(item.item_type.dateReported).toLocaleString()}
-            <br />
-            {item.item_description}
-          </Popup>
-        </Marker>
-      ))}
-    </>
+      {/* Render the clusters for lost and found items */}
+      <ItemClusterGroup items={items} />
+
+      {/* Add custom clustering logic if needed */}
+      </>
   );
 }
