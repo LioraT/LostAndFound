@@ -51,8 +51,8 @@ export default function SearchByPoliceStations() {
         >
           <Popup>
             <div className={styles.policeStationPopup}>
-              <h3>{station.name}</h3>
-              <p><strong>Address:</strong> {station.address}</p>
+              <h3>Police</h3>
+              <p><strong>משטרה</strong> {station.properties.name} </p>
               {station.phone && <p><strong>Phone:</strong> {station.phone}</p>}
               {station.district && <p><strong>District:</strong> {station.district}</p>}
               <button 
