@@ -6,6 +6,7 @@ import HeatmapView from "../features/HeatmapView";
 import ItemZoom from "../features/ItemZoom";
 import styles from "../../styles/theme.module.css";
 import AddItemFeature from "../features/AddItemFeature";
+import PoliceStations from "../features/SearchByPoliceStations";
 
 export default function FeatureManager() {
   const [mode, setMode] = useState("neighborhood");
@@ -41,6 +42,12 @@ export default function FeatureManager() {
           ➕ Add Item
 
         </button>
+        <button
+          className={mode === "police" ? styles.activeButton : ""}
+          onClick={() => setMode("police")}
+        >
+          👮 Police Stations
+        </button>
       </div>
 
       {/* Feature logic */}
@@ -52,9 +59,7 @@ export default function FeatureManager() {
 
       {mode === "add" && <AddItemFeature />}
 
+      {mode === "police" && <PoliceStations />}
     </>
   );
 }
-
-
-

@@ -2,7 +2,7 @@ const express = require('express');
 const Policestation = require('../models/policestation'); // Import the PoliceStation model
 const verifyToken = require("../middleware/authMiddleware");
 const router = express.Router();
-const mongoose = require('mongoose');   
+  
 
 
 
