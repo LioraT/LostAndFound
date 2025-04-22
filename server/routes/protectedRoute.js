@@ -3,6 +3,7 @@
  const router = express.Router();
  const User = require("../models/user");
  const debug = require('../utils/debug');
+ const Item = require("../models/item");
  
  const verifyToken = require("../middleware/authMiddleware");
  const adminOnly = require("../middleware/adminOnly");
@@ -147,21 +148,36 @@
   });
 
   router.delete("/users/:id", verifyToken(), adminOnly, async (req, res) => {
+    // Start a session for the transaction
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
       if (req.params.id === req.userId) {
         return res.status(403).json({ error: "You cannot delete your own account from here." });
       }
 
-      const deleted = await User.findByIdAndDelete(req.params.id);
-  
+      // Delete all items owned by this user within the transaction
+      await Item.deleteMany({ owner: req.params.id }, { session });
+
+      // Delete the user within the transaction
+      const deleted = await User.findByIdAndDelete(req.params.id).session(session);
+
       if (!deleted) {
+        await session.abortTransaction();
         return res.status(404).json({ error: "User not found" });
       }
-  
-      res.json({ message: "User deleted successfully" });
+
+      // Commit the transaction
+      await session.commitTransaction();
+      res.json({ message: "User and all associated items deleted successfully" });
     } catch (err) {
+      // Rollback the transaction on error
+      await session.abortTransaction();
       console.error("Error deleting user:", err);
       res.status(500).json({ error: "Failed to delete user" });
+    } finally {
+      session.endSession();
     }
   });
 
