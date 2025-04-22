@@ -67,7 +67,7 @@ export default function FeatureManager() {
       {/* Feature logic */}
       <ItemZoom />
 
-      {mode === "neighborhood" && <SearchByNeighborhood filter={filterOptions} />}
+      {mode === "neighborhood" && <SearchByNeighborhood filter={filterOptions} active={mode === "neighborhood"} />}
       {mode === "radius" && <SearchByRadius filter={filterOptions} />}
       {mode === "heatmap" && <HeatmapView />}
       {mode === "add" && <AddItemFeature filter={filterOptions} />}
