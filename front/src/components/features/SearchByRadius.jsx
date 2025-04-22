@@ -72,7 +72,7 @@ export default function SearchByRadius({ filter }) {
       {clicked && (
         <Circle
           center={center}
-          radius={1500}
+          radius={filter.radius || 1500} // ✅ dynamic radius from filter
           pathOptions={{ color: "blue", fillOpacity: 0.1 }}
         />
       )}

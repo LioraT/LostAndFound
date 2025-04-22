@@ -5,7 +5,7 @@ import api from "../../api/axios";
 import styles from "../../styles/theme.module.css";
 import ItemClusterGroup from './ItemClusterGroup';
 
-export default function SearchByNeighborhood({ filter }) {
+export default function SearchByNeighborhood({ filter, active }) {
   const { mapRef } = useMap();
 
   const [neighborhoodName, setNeighborhoodName] = useState('');
@@ -16,6 +16,7 @@ export default function SearchByNeighborhood({ filter }) {
   const ClickHandler = () => {
     useMapEvents({
       click: async (e) => {
+        if (!active) return; // ✅ Skip logic if inactive
         setError('');
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
