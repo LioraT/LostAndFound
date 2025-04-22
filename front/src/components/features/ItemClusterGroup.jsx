@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import styles from "../../styles/theme.module.css";
+import ItemCard from '../../pages/Items/ItemCard';
 
 // Fix Leaflet's default icon path issues
 delete L.Icon.Default.prototype._getIconUrl;
@@ -21,23 +22,10 @@ L.Icon.Default.mergeOptions({
 const createClusterIcon = (type) => {
   return (cluster) => {
     const count = cluster.getChildCount();
-    const backgroundColor = type === 'lost' ? '#ff4444' : '#4CAF50';
-    
+    const className = `clusterIcon${type.charAt(0).toUpperCase() + type.slice(1)}`;
     return L.divIcon({
       html: `
-        <div class="custom-cluster-icon" style="
-          background-color: ${backgroundColor};
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-weight: bold;
-          border: 2px solid white;
-          box-shadow: 0 0 4px rgba(0,0,0,0.5);
-        ">
+        <div class="${styles.clusterIcon} ${styles[className]}">
           ${count}
         </div>
       `,
@@ -48,6 +36,36 @@ const createClusterIcon = (type) => {
   };
 };
 
+// Reusable ItemMarkerCluster component
+const ItemMarkerCluster = ({ items, type, selectedItem, onSelectItem }) => (
+  <MarkerClusterGroup
+    chunkedLoading
+    maxClusterRadius={60}
+    showCoverageOnHover={false}
+    zoomToBoundsOnClick={true}
+    spiderfyOnMaxZoom={true}
+    removeOutsideVisibleBounds={true}
+    iconCreateFunction={createClusterIcon(type)}
+  >
+    {items.map((item) => (
+      <Marker
+        key={item._id}
+        position={[item.location.coordinates[1], item.location.coordinates[0]]}
+        icon={selectedItem === item._id ? mapIcons[`${type}Highlighted`] : mapIcons[type]}
+        eventHandlers={{
+          click: () => onSelectItem(item._id),
+          mouseover: () => onSelectItem(item._id),
+          mouseout: () => onSelectItem(null),
+        }}
+      >
+        <Popup maxWidth={300} maxHeight={400}>
+          <ItemCard item={item} inPopup={true} />
+        </Popup>
+      </Marker>
+    ))}
+  </MarkerClusterGroup>
+);
+
 export default function ItemClusterGroup({ items }) {
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -57,77 +75,18 @@ export default function ItemClusterGroup({ items }) {
 
   return (
     <>
-      {/* Lost Items Cluster */}
-      <MarkerClusterGroup
-        chunkedLoading
-        maxClusterRadius={30}
-        minZoom={3}
-        maxZoom={18}
-        spiderfyOnMaxZoom={true}
-        showCoverageOnHover={false}
-        zoomToBoundsOnClick={true}
-        disableClusteringAtZoom={16}
-        iconCreateFunction={createClusterIcon('lost')}
-      >
-        {lostItems.map((item) => (
-          <Marker
-            key={item._id}
-            position={[item.location.coordinates[1], item.location.coordinates[0]]}
-            icon={selectedItem === item._id ? mapIcons.lostHighlighted : mapIcons.lost}
-            eventHandlers={{
-              click: () => setSelectedItem(item._id),
-              mouseover: () => setSelectedItem(item._id),
-              mouseout: () => setSelectedItem(null),
-            }}
-          >
-            <Popup>
-              <div className={styles.itemPopup}>
-                <strong>{item.item_type?.type?.toUpperCase()}</strong><br />
-                <span className={styles.itemCategory}>{item.item_category}</span><br />
-                {item.item_description}<br />
-                <span className={styles.itemDate}>
-                  {new Date(item.item_type?.dateReported).toLocaleString()}
-                </span>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-      </MarkerClusterGroup>
-
-      {/* Found Items Cluster */}
-      <MarkerClusterGroup
-        chunkedLoading
-        maxClusterRadius={60}
-        showCoverageOnHover={false}
-        zoomToBoundsOnClick={true}
-        spiderfyOnMaxZoom={true}
-        removeOutsideVisibleBounds={true}
-        iconCreateFunction={createClusterIcon('found')}
-      >
-        {foundItems.map((item) => (
-          <Marker
-            key={item._id}
-            position={[item.location.coordinates[1], item.location.coordinates[0]]}
-            icon={selectedItem === item._id ? mapIcons.foundHighlighted : mapIcons.found}
-            eventHandlers={{
-              click: () => setSelectedItem(item._id),
-              mouseover: () => setSelectedItem(item._id),
-              mouseout: () => setSelectedItem(null),
-            }}
-          >
-            <Popup>
-              <div className={styles.itemPopup}>
-                <strong>{item.item_type?.type?.toUpperCase()}</strong><br />
-                <span className={styles.itemCategory}>{item.item_category}</span><br />
-                {item.item_description}<br />
-                <span className={styles.itemDate}>
-                  {new Date(item.item_type?.dateReported).toLocaleString()}
-                </span>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-      </MarkerClusterGroup>
+      <ItemMarkerCluster 
+        items={lostItems}
+        type="lost"
+        selectedItem={selectedItem}
+        onSelectItem={setSelectedItem}
+      />
+      <ItemMarkerCluster 
+        items={foundItems}
+        type="found"
+        selectedItem={selectedItem}
+        onSelectItem={setSelectedItem}
+      />
     </>
   );
 }
