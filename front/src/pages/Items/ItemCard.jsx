@@ -95,30 +95,6 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup }) => {
             {new Date(item.item_type.dateReported).toLocaleDateString()}
           </span>
         </div>
-
-        <div className={styles.itemFooter}>
-          <div className={styles.itemActions}>
-            {isOwner && (
-              <>
-                <button 
-                  className={styles.editItem}
-                  onClick={() => navigate(`/edit_item/${item._id}`)}
-                >
-                  Edit
-                </button>
-                <button 
-                  className={styles.deleteItem}
-                  onClick={() => onDelete(item._id)}
-                >
-                  Delete
-                </button>
-              </>
-            )}
-          </div>
-          <div className={styles.itemStatus}>
-            {item.item_type.resolved ? 'Resolved' : 'Active'}
-          </div>
-        </div>
       </div>
     </div>
   );
