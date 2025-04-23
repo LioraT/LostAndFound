@@ -1,77 +1,71 @@
 // components/map/FeatureManager.jsx
-import { useState } from "react";
-import SearchByNeighborhood from "../features/SearchByNeighborhood";
-import SearchByRadius from "../features/SearchByRadius";
-import HeatmapView from "../features/HeatmapView";
-import ItemZoom from "../features/ItemZoom";
-import AddItemFeature from "../features/AddItemFeature";
-import PoliceStations from "../features/SearchByPoliceStations";
-import FilterPanel from "../shared/FilterPanel"; // ✅ NEW
+import { useContext, useState } from "react";
+import FilterPanel from "../shared/FilterPanel";
 import styles from "../../styles/theme.module.css";
+import { MapContext } from "./MapProvider";
 
-export default function FeatureManager() {
-  const [mode, setMode] = useState("neighborhood");
-
-  // ✅ Shared filter state
-  const [filterOptions, setFilterOptions] = useState({
-    item_category: "",
-    item_type: "",
-    resolved: "",
-    keywords: "",
-    radius: 1500
-  });
+export default function FeatureManager({ sidebarExpanded }) {
+  const { mode, setMode, filterOptions, setFilterOptions } = useContext(MapContext);
+  const [filterOpen, setFilterOpen] = useState(false);  // ✅ Local state for filter toggle
 
   return (
     <>
-      {/* ✅ Shared filter panel */}
-      <FilterPanel
-        filter={filterOptions}
-        onChange={setFilterOptions}
-        showRadius={mode === "radius" || mode === "add"}
-      />
-
-      {/* Floating sidebar */}
+      {/* Mode buttons */}
       <div className={styles.featureSidebar}>
         <button
           className={mode === "neighborhood" ? styles.activeButton : ""}
           onClick={() => setMode("neighborhood")}
         >
-          🔎 Neighborhood
+          🔎
         </button>
         <button
           className={mode === "radius" ? styles.activeButton : ""}
           onClick={() => setMode("radius")}
         >
-          📍 Radius
+          📍
         </button>
         <button
           className={mode === "heatmap" ? styles.activeButton : ""}
           onClick={() => setMode("heatmap")}
         >
-          🌡️ Heatmap
+          🌡️
         </button>
         <button
           className={mode === "add" ? styles.activeButton : ""}
           onClick={() => setMode("add")}
         >
-          ➕ Add Item
+          ➕
         </button>
         <button
           className={mode === "police" ? styles.activeButton : ""}
           onClick={() => setMode("police")}
         >
-          👮 Police Stations
+          👮
         </button>
       </div>
 
-      {/* Feature logic */}
-      <ItemZoom />
+      {/* Filter Panel Toggle */}
+      {sidebarExpanded && (
+        <>
+          {!filterOpen && (
+            <div className={styles.filterToggle} onClick={() => setFilterOpen(true)}>
+              ⚙️
+            </div>
+          )}
 
-      {mode === "neighborhood" && <SearchByNeighborhood filter={filterOptions} active={mode === "neighborhood"} />}
-      {mode === "radius" && <SearchByRadius filter={filterOptions} />}
-      {mode === "heatmap" && <HeatmapView />}
-      {mode === "add" && <AddItemFeature filter={filterOptions} />}
-      {mode === "police" && <PoliceStations />}
+          {filterOpen && (
+            <div className={styles.filterPanelExpanded}>
+              <FilterPanel
+                filter={filterOptions}
+                onChange={setFilterOptions}
+                showRadius={mode === "radius" || mode === "add"}
+              />
+              <button onClick={() => setFilterOpen(false)}>❌ Close</button>
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 }
+
