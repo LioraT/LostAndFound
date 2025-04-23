@@ -1,71 +1,48 @@
 // components/map/FeatureManager.jsx
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import FilterPanel from "../shared/FilterPanel";
 import styles from "../../styles/theme.module.css";
 import { MapContext } from "./MapProvider";
 
-export default function FeatureManager({ sidebarExpanded }) {
+export default function FeatureManager({ sidebarExpanded, filterOpen, setFilterOpen }) {  // ✅ Get filterOpen & setFilterOpen from parent
   const { mode, setMode, filterOptions, setFilterOptions } = useContext(MapContext);
-  const [filterOpen, setFilterOpen] = useState(false);  // ✅ Local state for filter toggle
 
   return (
     <>
       {/* Mode buttons */}
       <div className={styles.featureSidebar}>
-        <button
-          className={mode === "neighborhood" ? styles.activeButton : ""}
-          onClick={() => setMode("neighborhood")}
-        >
-          🔎
+        <button onClick={() => setMode("neighborhood")} className={mode === "neighborhood" ? styles.activeButton : ""}>
+          📍 <span className={styles.buttonLabel}>Neighborhood</span>
         </button>
-        <button
-          className={mode === "radius" ? styles.activeButton : ""}
-          onClick={() => setMode("radius")}
-        >
-          📍
+        <button onClick={() => setMode("radius")} className={mode === "radius" ? styles.activeButton : ""}>
+          🔎 <span className={styles.buttonLabel}>Radius</span>
         </button>
-        <button
-          className={mode === "heatmap" ? styles.activeButton : ""}
-          onClick={() => setMode("heatmap")}
-        >
-          🌡️
+        <button onClick={() => setMode("heatmap")} className={mode === "heatmap" ? styles.activeButton : ""}>
+          🌡️ <span className={styles.buttonLabel}>Heatmap</span>
         </button>
-        <button
-          className={mode === "add" ? styles.activeButton : ""}
-          onClick={() => setMode("add")}
-        >
-          ➕
+        <button onClick={() => setMode("add")} className={mode === "add" ? styles.activeButton : ""}>
+          ➕ <span className={styles.buttonLabel}>Add Item</span>
         </button>
-        <button
-          className={mode === "police" ? styles.activeButton : ""}
-          onClick={() => setMode("police")}
-        >
-          👮
+        <button onClick={() => setMode("police")} className={mode === "police" ? styles.activeButton : ""}>
+          👮 <span className={styles.buttonLabel}>Police</span>
         </button>
       </div>
 
-      {/* Filter Panel Toggle */}
-      {sidebarExpanded && (
-        <>
-          {!filterOpen && (
-            <div className={styles.filterToggle} onClick={() => setFilterOpen(true)}>
-              ⚙️
-            </div>
-          )}
+      {/* Filter Toggle (Always visible) */}
+      <div className={styles.filterToggle} onClick={() => setFilterOpen(!filterOpen)}>
+        ⚙️
+      </div>
 
-          {filterOpen && (
-            <div className={styles.filterPanelExpanded}>
-              <FilterPanel
-                filter={filterOptions}
-                onChange={setFilterOptions}
-                showRadius={mode === "radius" || mode === "add"}
-              />
-              <button onClick={() => setFilterOpen(false)}>❌ Close</button>
-            </div>
-          )}
-        </>
+      {/* Filter Panel */}
+      {sidebarExpanded && filterOpen && (
+        <div className={styles.filterPanelExpanded}>
+          <FilterPanel
+            filter={filterOptions}
+            onChange={setFilterOptions}
+            showRadius={mode === "radius" || mode === "add"}
+          />
+        </div>
       )}
     </>
   );
 }
-

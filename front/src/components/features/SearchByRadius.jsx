@@ -61,7 +61,7 @@ export default function SearchByRadius({ filter }) {
 
       {!clicked && (
         <div className={styles.mapHint}>
-          🖱️ Click on the map to search lost/found items within 1.5 km
+          🖱️ Click on the map to search lost/found items within {filter.radius || 1500} meters
         </div>
       )}
 
