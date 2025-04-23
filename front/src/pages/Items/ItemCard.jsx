@@ -1,3 +1,4 @@
+// pages/items/ItemCard.jsx
 import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
