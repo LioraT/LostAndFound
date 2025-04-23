@@ -14,11 +14,7 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup }) => {
   const markerIcon = item.item_type.type === 'lost' ? mapIcons.lost : mapIcons.found;
 
   const handleTitleClick = () => {
-    if (inPopup) {
-      navigate(`/items?item=${item._id}`);
-    } else {
-      navigate(`/item/${item._id}`, { state: { isOwner } });
-    }
+    navigate(`/map-tools?item=${item._id}&zoom=true&preview=true`);
   };
 
   return (
@@ -30,7 +26,7 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup }) => {
         {item.location && item.location.coordinates && (
           <div 
             className={styles.mapPreviewContainer}
-            onClick={() => navigate(`/map-tools?item=${item._id}&zoom=true`)}
+            onClick={handleTitleClick}
             style={{ cursor: 'pointer' }}
           >
             <MapContainer
