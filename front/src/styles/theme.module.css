@@ -896,22 +896,18 @@
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
-    align-items: center;
-    gap: 10px;
-    width: 100%;
   }
   
   
   .featureSidebar button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: none;
+    padding: 8px 12px;
     border: none;
+    border-radius: 8px;
+    background: #f0f0f0;
     cursor: pointer;
-    padding: 8px;
-    width: 100%;
-    justify-content: center; /* Center when collapsed */
+    font-weight: 500;
+    font-size: 14px;
+    transition: background 0.2s;
   }
   
   .featureSidebar button:hover {
@@ -1052,23 +1048,21 @@
 /* Map Sidebar - Collapsible */
 
 .mapSidebar {
-  width: 60px;
+  width: 60px;  /* Narrow by default */
   background: #fff;
   border-left: 1px solid #ccc;
+  overflow-y: auto;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;  /* Keep filter icon at the bottom */
-  align-items: center;
+  align-items: center;  /* Center icons */
   transition: width 0.3s ease;
   border-radius: 8px;
-  margin: 20px 20px 20px 0;
-  overflow: visible; /* ✅ Ensure no clipping */
+  margin: 20px 20px 20px 0;  /* Keep your existing margins */
 }
 
 .mapSidebar.expanded {
-  width: 200px;
-  overflow: visible;   /* ✅ No clipping */
-  align-items: flex-start;  /* ✅ Align content to the left when expanded */
+  width: 300px;  /* Expand when hovered */
 }
 
 /* Filter toggle icon */
@@ -1076,7 +1070,6 @@
   cursor: pointer;
   margin-top: auto;  /* Push the icon to the bottom */
   font-size: 1.5rem;
-  padding: 10px;
 }
 
 /* Collapsible filter panel */
@@ -1092,9 +1085,8 @@
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
-  min-width: 180px;  /* Matches sidebar width */
-  max-width: 180px;
-  z-index: 1000;     /* ✅ Ensure it's on top */
+  min-width: 250px;
+  margin-top: 10px;
 }
 
 /* Map and Cluster Styles */
@@ -1109,20 +1101,6 @@
   font-weight: bold;
   border: 2px solid white;
   box-shadow: 0 0 4px rgba(0,0,0,0.5);
-}
-
-
-.mapSidebar.expanded .featureSidebar button {
-  justify-content: flex-start; /* Align left when expanded */
-  padding-left: 12px;
-}
-
-.buttonLabel {
-  display: none; /* Hide labels by default */
-}
-
-.mapSidebar.expanded .buttonLabel {
-  display: inline; /* Show labels when expanded */
 }
 
 .clusterIconLost {
@@ -1187,4 +1165,3 @@
 :global(.leaflet-popup-pane) {
   z-index: 500;
 }
-

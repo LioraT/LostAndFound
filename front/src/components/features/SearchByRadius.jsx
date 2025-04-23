@@ -12,15 +12,12 @@ export default function SearchByRadius({ filter }) {
   const [items, setItems] = useState([]);
   const [center, setCenter] = useState([32.0853, 34.7818]); // Tel Aviv default
   const [loading, setLoading] = useState(false);
-  const [clicked, setClicked] = useState(false);
+  const [clicked, setClicked] = useState(true); // Changed to true by default
 
   // Fetch items on map click
   useEffect(() => {
-    if (!clicked) return;
-
     const fetchNearbyItems = async () => {
       setLoading(true);
-      console.log("fetchNearbyItems",filter);
       try {
         const { data } = await api.get("/items/nearby", {
           params: {
@@ -35,14 +32,14 @@ export default function SearchByRadius({ filter }) {
         });
         setItems(data);
       } catch (err) {
-        console.error("Error fetching items:", err.message);
+        console.error("Error fetching items:", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchNearbyItems();
-  }, [center, clicked]);
+  }, [center, filter]);
 
   // Hook into map clicks
   const MapClickHandler = () => {
