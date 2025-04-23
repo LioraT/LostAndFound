@@ -7,6 +7,7 @@ import styles from "../styles/theme.module.css";
 
 export default function MapToolsPage() {
   const [sidebarExpanded, setSidebarExpanded] = useState(false); // ✅ New state for sidebar expansion
+  const [filterOpen, setFilterOpen] = useState(false);             // ✅ Filter panel toggle
 
   return (
     <MapProvider>
@@ -15,12 +16,12 @@ export default function MapToolsPage() {
           <MainMap />
         </div>
         <div
-          className={`${styles.mapSidebar} ${sidebarExpanded ? styles.expanded : ""}`} // ✅ Apply expanded style
+          className={`${styles.mapSidebar} ${sidebarExpanded || filterOpen ? styles.expanded : ""}`}  // ✅ Expand if filter is open
           onMouseEnter={() => setSidebarExpanded(true)}   // ✅ Expand on hover
           onMouseLeave={() => setSidebarExpanded(false)}  // ✅ Collapse on mouse leave
         >
-          <FeatureManager sidebarExpanded={sidebarExpanded} /> {/* Pass expansion state */}
-        </div>
+        <FeatureManager sidebarExpanded={sidebarExpanded || filterOpen} filterOpen={filterOpen} setFilterOpen={setFilterOpen} /> {/* Pass filter state */}
+       </div>
       </div>
     </MapProvider>
   );
