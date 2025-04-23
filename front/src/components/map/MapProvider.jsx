@@ -8,8 +8,9 @@ export const useMap = () => useContext(MapContext);
 export default function MapProvider({ children }) {
   const mapRef = useRef(null);
   
-  // ✅ Add mode and filterOptions here:
-  const [mode, setMode] = useState("neighborhood");
+  // Initialize with no mode selected
+  const [mode, setMode] = useState("");
+  const [defaultCoordinates, setDefaultCoordinates] = useState(null);
   const [filterOptions, setFilterOptions] = useState({
     item_category: "",
     item_type: "",
@@ -22,7 +23,9 @@ export default function MapProvider({ children }) {
     <MapContext.Provider value={{ 
       mapRef, 
       mode, setMode, 
-      filterOptions, setFilterOptions  // ✅ Add to context
+      filterOptions, setFilterOptions,
+      defaultCoordinates,
+      setDefaultCoordinates
     }}>
       {children}
     </MapContext.Provider>

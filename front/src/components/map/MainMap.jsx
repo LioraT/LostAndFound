@@ -9,6 +9,7 @@ import AddItemFeature from "../features/AddItemFeature";
 import HeatmapView from "../features/HeatmapView";
 import PoliceStations from "../features/SearchByPoliceStations";  // ✅ Add this back
 import ItemZoom from "../features/ItemZoom";
+import AllItemsView from "../features/AllItemsView";
 import "leaflet/dist/leaflet.css";
 
 export default function MainMap() {
@@ -29,6 +30,8 @@ export default function MainMap() {
       
       {/* ✅ Render features directly */}
       <ItemZoom />
+      {/* Show AllItemsView when no specific mode is selected */}
+      {!mode && <AllItemsView />}
       {mode === "neighborhood" && (<SearchByNeighborhood filter={filterOptions} active={mode === "neighborhood"} />)}
       {mode === "radius" && <SearchByRadius filter={filterOptions} />}
       {mode === "add" && <AddItemFeature filter={filterOptions} />}
