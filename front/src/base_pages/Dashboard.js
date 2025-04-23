@@ -16,6 +16,7 @@ export default function Dashboard() {
 
   return (
     <div className={styles.dashboardContainer}>
+       <img src="/lnflogo1.png" alt="Company Logo" className={styles.footerLogo} />
       <h2 className={styles.dashboardWelcome}>
         Welcome, {user?.username || "Guest"}
       </h2>

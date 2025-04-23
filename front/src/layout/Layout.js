@@ -21,7 +21,6 @@ export default function Layout() {
       </main>
       <footer className={styles.layoutFooter}>
         <div className={styles.footerContent}>
-          <img src="/pklogo.png" alt="Company Logo" className={styles.footerLogo} />
           <div className={styles.footerQuote}>
             <h2>“Here’s to alcohol: the cause of, and solution to, all of life’s problems.”</h2>
             <h3>Homer Simpson</h3>
