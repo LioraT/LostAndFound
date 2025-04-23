@@ -491,18 +491,7 @@
     overflow: hidden;
     margin: 20px 0 20px 20px; /* ✅ Adjust margin to fit sidebar layout */
   }
-  
-  .mapSidebar {
-    width: 300px;
-    background: #fff;
-    border-left: 1px solid #ccc;
-    overflow-y: auto;
-    padding: 10px;
-    margin: 20px 20px 20px 0;  /* Match map margins */
-    border-radius: 8px;
-  }
-   
-  
+    
   .mapMessage {
     position: absolute;
     top: 20px;
@@ -914,9 +903,23 @@
     background: #e0e0e0;
   }
   
+  .modeButton {
+    background: #f0f0f0;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+  }
+  
+  .modeButton:hover {
+    background: #e0e0e0;
+  }
+  
   .activeButton {
-    background-color: #4a90e2;
-    color: white;
+    background-color: #4a90e2 !important;
+    color: white !important;
   }
   
 
@@ -1048,45 +1051,17 @@
 /* Map Sidebar - Collapsible */
 
 .mapSidebar {
-  width: 60px;  /* Narrow by default */
+  width: 60px;  /* Fixed width */
   background: #fff;
   border-left: 1px solid #ccc;
-  overflow-y: auto;
+  overflow-y: auto;        /* Allow vertical scroll */
+  overflow-x: hidden;      /* Prevent horizontal scrollbars/arrows */
   padding: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;  /* Center icons */
-  transition: width 0.3s ease;
+  align-items: center;
   border-radius: 8px;
-  margin: 20px 20px 20px 0;  /* Keep your existing margins */
-}
-
-.mapSidebar.expanded {
-  width: 300px;  /* Expand when hovered */
-}
-
-/* Filter toggle icon */
-.filterToggle {
-  cursor: pointer;
-  margin-top: auto;  /* Push the icon to the bottom */
-  font-size: 1.5rem;
-}
-
-/* Collapsible filter panel */
-.filterPanelCollapsed {
-  display: none;
-}
-
-.filterPanelExpanded {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
-  min-width: 250px;
-  margin-top: 10px;
+  margin: 20px 20px 20px 0;
 }
 
 /* Map and Cluster Styles */
@@ -1109,6 +1084,31 @@
 
 .clusterIconFound {
   background-color: #4CAF50;
+}
+
+
+/* Tooltip (default browser tooltips) handled by title attribute */
+
+.filterPopup {
+  position: absolute;
+  top: 60px;         /* Adjust vertical positioning */
+  right: 120px;        /* Just left of the sidebar */
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  min-width: 250px;
+  z-index: 9999;
+}
+
+.modalClose {
+  margin-top: 10px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 /* Leaflet Popup Overrides */
