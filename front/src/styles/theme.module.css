@@ -1088,3 +1088,80 @@
   min-width: 250px;
   margin-top: 10px;
 }
+
+/* Map and Cluster Styles */
+.clusterIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  border: 2px solid white;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+
+.clusterIconLost {
+  background-color: #ff4444;
+}
+
+.clusterIconFound {
+  background-color: #4CAF50;
+}
+
+/* Leaflet Popup Overrides */
+:global(.leaflet-popup-content) {
+  margin: 0;
+  width: 300px !important;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+:global(.leaflet-popup-content::-webkit-scrollbar) {
+  display: none;
+}
+
+:global(.leaflet-popup-content-wrapper) {
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+:global(.leaflet-popup-content-wrapper::-webkit-scrollbar) {
+  display: none;
+}
+
+/* ItemCard specific styles when in popup */
+:global(.leaflet-popup-content .itemCard) {
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  transform: none !important;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+:global(.leaflet-popup-content .itemCard::-webkit-scrollbar) {
+  display: none;
+}
+
+:global(.leaflet-popup-content .itemCard:hover) {
+  transform: none !important;
+  box-shadow: none;
+}
+
+/* Ensure proper stacking context */
+:global(.leaflet-marker-pane) {
+  z-index: 400;
+}
+
+:global(.leaflet-popup-pane) {
+  z-index: 500;
+}
