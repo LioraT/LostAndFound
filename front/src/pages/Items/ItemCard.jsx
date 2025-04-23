@@ -1,3 +1,4 @@
+// pages/items/ItemCard.jsx
 import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
@@ -5,7 +6,7 @@ import { mapIcons } from '../../utils/mapIcons';
 import 'leaflet/dist/leaflet.css'
 import styles from '../../styles/items.module.css';
 
-const ItemCard = ({ item, onDelete, isOwner }) => {
+const ItemCard = ({ item, onDelete, isOwner, inPopup }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const highlightedItemId = searchParams.get('item');
@@ -13,7 +14,11 @@ const ItemCard = ({ item, onDelete, isOwner }) => {
   const markerIcon = item.item_type.type === 'lost' ? mapIcons.lost : mapIcons.found;
 
   const handleTitleClick = () => {
-    navigate(`/item/${item._id}`, { state: { isOwner } });
+    if (inPopup) {
+      navigate(`/items?item=${item._id}`);
+    } else {
+      navigate(`/item/${item._id}`, { state: { isOwner } });
+    }
   };
 
   return (
@@ -89,30 +94,6 @@ const ItemCard = ({ item, onDelete, isOwner }) => {
           <span className={styles.itemValue}>
             {new Date(item.item_type.dateReported).toLocaleDateString()}
           </span>
-        </div>
-
-        <div className={styles.itemFooter}>
-          <div className={styles.itemActions}>
-            {isOwner && (
-              <>
-                <button 
-                  className={styles.editItem}
-                  onClick={() => navigate(`/edit_item/${item._id}`)}
-                >
-                  Edit
-                </button>
-                <button 
-                  className={styles.deleteItem}
-                  onClick={() => onDelete(item._id)}
-                >
-                  Delete
-                </button>
-              </>
-            )}
-          </div>
-          <div className={styles.itemStatus}>
-            {item.item_type.resolved ? 'Resolved' : 'Active'}
-          </div>
         </div>
       </div>
     </div>
