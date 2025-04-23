@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Marker, Popup, useMap } from 'react-leaflet';
 import { mapIcons } from '../../utils/mapIcons';
 import api from '../../api/axios';
+import ItemCard from '../../pages/Items/ItemCard';
 
 export default function ItemZoom() {
   const [searchParams] = useSearchParams();
@@ -11,6 +12,7 @@ export default function ItemZoom() {
 
   const itemId = searchParams.get('item');
   const shouldZoom = searchParams.get('zoom') === 'true';
+  const isPreview = searchParams.get('preview') === 'true';
 
   useEffect(() => {
     if (itemId) {
@@ -50,15 +52,8 @@ export default function ItemZoom() {
       ]}
       icon={markerIcon}
     >
-      <Popup>
-        <div>
-          <strong>{selectedItem.title}</strong><br />
-          Category: {selectedItem.item_category}<br />
-          Status: {selectedItem.item_type.type.toUpperCase()}<br />
-          Date: {new Date(selectedItem.item_type.dateReported).toLocaleDateString()}<br />
-          Description: {selectedItem.item_description}<br />
-          Contact: {selectedItem.owner_name} ({selectedItem.telephone})
-        </div>
+      <Popup maxWidth={300} maxHeight={400}>
+        <ItemCard item={selectedItem} inPopup={true} />
       </Popup>
     </Marker>
   );

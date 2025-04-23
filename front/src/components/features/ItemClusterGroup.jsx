@@ -9,6 +9,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import styles from "../../styles/theme.module.css";
 import ItemCard from '../../pages/Items/ItemCard';
+import { useSearchParams } from 'react-router-dom';
 
 // Fix Leaflet's default icon path issues
 delete L.Icon.Default.prototype._getIconUrl;
@@ -68,10 +69,15 @@ const ItemMarkerCluster = ({ items, type, selectedItem, onSelectItem }) => (
 
 export default function ItemClusterGroup({ items }) {
   const [selectedItem, setSelectedItem] = useState(null);
+  const [searchParams] = useSearchParams();
+  const previewItemId = searchParams.get('item');
+
+  // Filter out the previewed item from the regular items list
+  const filteredItems = items.filter(item => item._id !== previewItemId);
 
   // Separate items by type
-  const lostItems = items.filter(item => item.item_type?.type === 'lost');
-  const foundItems = items.filter(item => item.item_type?.type === 'found');
+  const lostItems = filteredItems.filter(item => item.item_type?.type === 'lost');
+  const foundItems = filteredItems.filter(item => item.item_type?.type === 'found');
 
   return (
     <>
