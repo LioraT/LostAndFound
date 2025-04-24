@@ -6,11 +6,27 @@ import { MapContext } from "./MapProvider";
 import api from "../../api/axios";
 
 export default function FeatureManager() {
-  const { mode, setMode, filterOptions, setFilterOptions, setDefaultCoordinates } = useContext(MapContext);
+  const { 
+    mode, 
+    setMode, 
+    filterOptions, 
+    setFilterOptions, 
+    setDefaultCoordinates,
+    setCurrentNeighborhood,
+    setNeighborhoodPolygon
+  } = useContext(MapContext);
   const [filterOpen, setFilterOpen] = useState(false);  // Modal toggle for filter
 
   const handleModeChange = async (newMode) => {
-    setMode(newMode);
+    if (mode === newMode) {
+      setMode("");
+      setMode(newMode);
+      setCurrentNeighborhood(null);
+      setNeighborhoodPolygon(null);
+      setDefaultCoordinates(null);
+    } else {
+      setMode(newMode);
+    }
     
     // if (newMode === "neighborhood") {
     //   const defaultCoords = { lng: 34.7689, lat: 32.0631 };
