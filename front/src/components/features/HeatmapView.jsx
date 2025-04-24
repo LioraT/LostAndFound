@@ -14,7 +14,7 @@ if (!L.heatLayer) {
   console.error("Leaflet.heat not loaded!");
 }
 
-export default function HeatmapView() {
+export default function HeatmapView({ filter }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const mapContext = useMap();
@@ -43,20 +43,35 @@ export default function HeatmapView() {
     }
   });
 
-  // Fetch all items when component mounts
+  // Fetch filtered items when component mounts or filter changes
   useEffect(() => {
-    const fetchAllItems = async () => {
+    const fetchFilteredItems = async () => {
       setLoading(true);
       try {
-        const response = await api.get('/items/');
-        const validItems = response.data.filter(item => 
+        const bounds = map.getBounds();
+        const center = map.getCenter();
+        
+        const { data } = await api.get("/items/nearby", {
+          params: {
+            lng: center.lng,
+            lat: center.lat,
+            radius: filter.radius || 1500,
+            item_category: filter.item_category || undefined,
+            item_type: filter.item_type || undefined,
+            resolved: filter.resolved || undefined,
+            keywords: filter.keywords || undefined,
+            self: filter.self || undefined 
+          }
+        });
+        
+        const validItems = data.filter(item => 
           item.location && 
           item.location.coordinates && 
           item.location.coordinates.length === 2
         );
         
         setItems(validItems);
-        console.log('Fetched items for heatmap:', validItems.length);
+        console.log('Fetched filtered items for heatmap:', validItems.length);
       } catch (err) {
         console.error("Error fetching items:", err);
       } finally {
@@ -64,8 +79,10 @@ export default function HeatmapView() {
       }
     };
 
-    fetchAllItems();
-  }, []);
+    if (map) {
+      fetchFilteredItems();
+    }
+  }, [map, filter]); // Dependencies include both map and filter
 
   // Create and manage heatmap layers
   useEffect(() => {
@@ -99,16 +116,9 @@ export default function HeatmapView() {
     lostHeatLayer.addTo(map);
     foundHeatLayer.addTo(map);
 
-    // Add layer controls using layerNames from config
-    const layerControl = L.control.layers(null, {
-      [layerNames.lost]: lostHeatLayer,
-      [layerNames.found]: foundHeatLayer
-    }, { position: 'topright' }).addTo(map);
-
     return () => {
       map.removeLayer(lostHeatLayer);
       map.removeLayer(foundHeatLayer);
-      map.removeControl(layerControl);
     };
   }, [map, items]);
 
