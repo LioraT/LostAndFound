@@ -27,7 +27,8 @@ export default function SearchByRadius({ filter }) {
             item_category: filter.item_category || undefined,
             item_type: filter.item_type || undefined,
             resolved: filter.resolved || undefined,
-            keywords: filter.keywords || undefined
+            keywords: filter.keywords || undefined,
+            self: filter.self || undefined 
           }
         });
         setItems(data);

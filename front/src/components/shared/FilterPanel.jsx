@@ -1,9 +1,13 @@
+// components/shared/FilterPanel.jsx
 import styles from "../../styles/theme.module.css";
 
 export default function FilterPanel({ filter, onChange, showRadius = false }) {
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    onChange({ ...filter, [name]: value });
+    const { name, value, type, checked } = e.target;
+    onChange({
+      ...filter,
+      [name]: type === "checkbox" ? checked : value,
+    });
   };
 
   return (
@@ -65,6 +69,17 @@ export default function FilterPanel({ filter, onChange, showRadius = false }) {
           />
         </label>
       )}
+
+      {/* Self Checkbox */}
+      <label>
+        <input
+          type="checkbox"
+          name="self"
+          checked={filter.self || false}
+          onChange={handleChange}
+        />
+        My Items Only
+      </label>
     </div>
   );
 }

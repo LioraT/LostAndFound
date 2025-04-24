@@ -131,7 +131,8 @@ router.get('/nearby', verifyToken(), async (req, res) => {
     item_category,
     item_type,
     resolved,
-    keywords
+    keywords,
+    self
   } = req.query;
 
   if (!lat || !lng) {
@@ -153,6 +154,10 @@ router.get('/nearby', verifyToken(), async (req, res) => {
 
   if (item_category) {
     query.item_category = item_category;
+  }
+
+  if (self === 'true') {
+    query.owner = req.userId;
   }
 
   if (item_type) {
