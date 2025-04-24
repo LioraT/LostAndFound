@@ -35,7 +35,7 @@ export default function MainMap() {
       {mode === "neighborhood" && (<SearchByNeighborhood filter={filterOptions} active={mode === "neighborhood"} />)}
       {mode === "radius" && <SearchByRadius filter={filterOptions} />}
       {mode === "add" && <AddItemFeature filter={filterOptions} />}
-      {mode === "heatmap" && <HeatmapView />}
+      {mode === "heatmap" && <HeatmapView  filter={filterOptions} />}
       {mode === "police" && <PoliceStations />} 
     </MapContainer>
   );
