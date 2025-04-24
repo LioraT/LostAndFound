@@ -11,11 +11,13 @@ import PoliceStations from "../features/SearchByPoliceStations";  // ✅ Add thi
 import ItemZoom from "../features/ItemZoom";
 import AllItemsView from "../features/AllItemsView";
 import "leaflet/dist/leaflet.css";
+import { useSearchParams } from "react-router-dom";
 
 export default function MainMap() {
   const { mapRef } = useMap();
   const { mode, filterOptions } = useContext(MapContext); // ✅ Pull mode + filter
-
+  const [searchParams] = useSearchParams();
+  const itemId = searchParams.get('item');
   return (
     <MapContainer
       center={[32.08, 34.78]}
@@ -28,15 +30,18 @@ export default function MainMap() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       
-      {/* ✅ Render features directly */}
-      <ItemZoom />
-      {/* Show AllItemsView when no specific mode is selected */}
-      {!mode && <AllItemsView />}
-      {mode === "neighborhood" && (<SearchByNeighborhood filter={filterOptions} active={mode === "neighborhood"} />)}
-      {mode === "radius" && <SearchByRadius filter={filterOptions} />}
-      {mode === "add" && <AddItemFeature filter={filterOptions} />}
-      {mode === "heatmap" && <HeatmapView  filter={filterOptions} />}
-      {mode === "police" && <PoliceStations />} 
+      {itemId ? (
+        <ItemZoom />
+      ) : (
+        <>
+          {!mode && <AllItemsView />}
+          {mode === "neighborhood" && (<SearchByNeighborhood filter={filterOptions} active={mode === "neighborhood"} />)}
+          {mode === "radius" && <SearchByRadius filter={filterOptions} />}
+          {mode === "add" && <AddItemFeature filter={filterOptions} />}
+          {mode === "heatmap" && <HeatmapView filter={filterOptions} />}
+          {mode === "police" && <PoliceStations />}
+        </>
+      )}
     </MapContainer>
   );
 }

@@ -75,11 +75,6 @@ export default function ItemZoom() {
           position={[item.location.coordinates[1], item.location.coordinates[0]]}
           icon={mapIcons[item.item_type?.type || "lost"]}
         >
-          <Popup>
-            <strong>{item.item_category}</strong><br />
-            {item.item_description}<br />
-            {new Date(item.item_type?.dateReported).toLocaleString()}
-          </Popup>
         </Marker>
       ))}
     </>
