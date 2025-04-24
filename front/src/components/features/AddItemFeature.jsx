@@ -162,7 +162,7 @@ export default function AddItemFeature() {
                 />
               </label>
 
-              <div>
+              <div className="radioGroup">
                 <label>
                   <input
                     type="radio"
@@ -172,8 +172,8 @@ export default function AddItemFeature() {
                     onChange={handleChange}
                   />
                   Lost
-                </label>
-                <label>
+                  </label>
+                  <label>
                   <input
                     type="radio"
                     name="item_type"
@@ -182,10 +182,9 @@ export default function AddItemFeature() {
                     onChange={handleChange}
                   />
                   Found
-                </label>
-              </div>
-
-              <button type="submit">Log</button>
+                  </label>
+                  </div>
+              <button type="submit">submit</button>
             </form>
           </Popup>
         </Marker>
