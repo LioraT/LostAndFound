@@ -11,6 +11,8 @@ export default function MapProvider({ children }) {
   // Initialize with no mode selected
   const [mode, setMode] = useState("");
   const [defaultCoordinates, setDefaultCoordinates] = useState(null);
+  const [currentNeighborhood, setCurrentNeighborhood] = useState(null);
+  const [neighborhoodPolygon, setNeighborhoodPolygon] = useState(null);
   const [filterOptions, setFilterOptions] = useState({
     item_category: "",
     item_type: "",
@@ -26,7 +28,9 @@ export default function MapProvider({ children }) {
       mode, setMode, 
       filterOptions, setFilterOptions,
       defaultCoordinates,
-      setDefaultCoordinates
+      setDefaultCoordinates,
+      currentNeighborhood, setCurrentNeighborhood,
+      neighborhoodPolygon, setNeighborhoodPolygon
     }}>
       {children}
     </MapContext.Provider>

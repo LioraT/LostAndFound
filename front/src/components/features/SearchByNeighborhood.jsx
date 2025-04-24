@@ -8,12 +8,15 @@ import ItemClusterGroup from './ItemClusterGroup';
 
 export default function SearchByNeighborhood({ filter }) {
   const { mapRef } = useMap();
-  const { defaultCoordinates, mode } = useContext(MapContext);
+  const { 
+    currentNeighborhood, setCurrentNeighborhood,
+    neighborhoodPolygon, setNeighborhoodPolygon, mode
+  } = useContext(MapContext);
 
-  const [neighborhoodName, setNeighborhoodName] = useState('');
-  const [highlightedPolygon, setHighlightedPolygon] = useState(null);
+  // const [neighborhoodName, setNeighborhoodName] = useState('');
+  // const [highlightedPolygon, setHighlightedPolygon] = useState(null);
   const [items, setItems] = useState([]);
-  const [error, setError] = useState('');
+  //const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Handle default coordinates or map clicks
@@ -22,7 +25,7 @@ export default function SearchByNeighborhood({ filter }) {
       const response = await api.post('/neighborhoods/find-by-coordinates', coords);
       
       if (response.data.shemshchun) {
-        setNeighborhoodName(response.data.shemshchun);
+        setCurrentNeighborhood(response.data.shemshchun);
         await fetchPolygon(response.data.shemshchun);
         await fetchItems(response.data.shemshchun);
       }
@@ -36,7 +39,7 @@ export default function SearchByNeighborhood({ filter }) {
     try {
       const { data } = await api.get(`/neighborhoods/by-name/${encodeURIComponent(shemshchun)}`);
       const polygon = data.geometry.coordinates[0].map(([lng, lat]) => [lat, lng]);
-      setHighlightedPolygon(polygon);
+      setNeighborhoodPolygon(polygon);
     } catch (err) {
       console.error('Error fetching polygon:', err);
     }
@@ -75,12 +78,15 @@ export default function SearchByNeighborhood({ filter }) {
     return null;
   };
 
-  // Handle default coordinates when mode changes
+  // When returning to neighborhood mode, fetch data if we have a current neighborhood
   useEffect(() => {
-    if (mode === "neighborhood" && defaultCoordinates) {
-      handleCoordinates(defaultCoordinates);
+    if (mode === "neighborhood" && currentNeighborhood) {
+      fetchItems(currentNeighborhood);
+      if (!neighborhoodPolygon) {
+        fetchPolygon(currentNeighborhood);
+      }
     }
-  }, [defaultCoordinates, mode]);
+  }, [mode]);
 
   return (
     <>
@@ -90,9 +96,9 @@ export default function SearchByNeighborhood({ filter }) {
           Loading neighborhood data...
         </div>
       )}
-      {highlightedPolygon && (
+      {neighborhoodPolygon && (
         <Polygon
-          positions={highlightedPolygon}
+          positions={neighborhoodPolygon}
           pathOptions={{
             color: 'blue',
             weight: 2,
@@ -101,9 +107,9 @@ export default function SearchByNeighborhood({ filter }) {
         />
       )}
       <ItemClusterGroup items={items} />
-      {neighborhoodName && (
+      {currentNeighborhood && (
         <div className={styles.mapMessage}>
-          Showing items in {neighborhoodName}
+          Showing items in {currentNeighborhood}
         </div>
       )}
     </>

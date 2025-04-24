@@ -12,17 +12,17 @@ export default function FeatureManager() {
   const handleModeChange = async (newMode) => {
     setMode(newMode);
     
-    if (newMode === "neighborhood") {
-      const defaultCoords = { lng: 34.7689, lat: 32.0631 };
-      try {
-        const response = await api.post('/neighborhoods/find-by-coordinates', defaultCoords);
-        if (response.data.shemshchun) {
-          setDefaultCoordinates(defaultCoords);
-        }
-      } catch (err) {
-        console.error("Error fetching default neighborhood:", err);
-      }
-    }
+    // if (newMode === "neighborhood") {
+    //   const defaultCoords = { lng: 34.7689, lat: 32.0631 };
+    //   try {
+    //     const response = await api.post('/neighborhoods/find-by-coordinates', defaultCoords);
+    //     if (response.data.shemshchun) {
+    //       setDefaultCoordinates(defaultCoords);
+    //     }
+    //   } catch (err) {
+    //     console.error("Error fetching default neighborhood:", err);
+    //   }
+    // }
   };
 
   return (
