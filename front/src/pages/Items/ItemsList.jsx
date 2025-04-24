@@ -51,10 +51,21 @@ const ItemsList = () => {
     };
 
     // Filter items based on search term
-    const filteredItems = items.filter(item =>
-        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.address.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredItems = items.filter(item => {
+        const searchTermLower = searchTerm.toLowerCase();
+        return (
+            // Search by title
+            item.title.toLowerCase().includes(searchTermLower) ||
+            // Search by owner name (contact)
+            item.owner_name.toLowerCase().includes(searchTermLower) ||
+            // Search by address
+            item.address.toLowerCase().includes(searchTermLower) ||
+            // Search by reported date
+            new Date(item.item_type.dateReported).toLocaleDateString().toLowerCase().includes(searchTermLower) ||
+            // Search by item category
+            item.item_category.toLowerCase().includes(searchTermLower)
+        );
+    });
 
     // Pagination
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -72,7 +83,7 @@ const ItemsList = () => {
                     <div className={styles.searchBar}>
                         <input
                             type="text"
-                            placeholder="Search items..."
+                            placeholder="Search by title, contact, address, date, or category..."
                             value={searchTerm}
                             onChange={handleSearch}
                             className={styles.searchInput}
