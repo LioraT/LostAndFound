@@ -1,5 +1,4 @@
 // components/features/AddItemFeature.jsx
-
 import { useState } from "react";
 import { Marker, Popup, useMapEvents, useMap } from "react-leaflet";
 import styles from "../../styles/theme.module.css";
@@ -10,6 +9,7 @@ import { mapIcons } from "../../utils/mapIcons";
 export default function AddItemFeature() {
   const [clickedPosition, setClickedPosition] = useState(null);
   const [matchItems, setMatchItems] = useState([]);
+  const [recentItem, setRecentItem] = useState(null);  // ✅ Track recently added item
   const { token, user } = useAuth();
   const map = useMap();
 
@@ -65,6 +65,12 @@ export default function AddItemFeature() {
     try {
       const res = await api.post("/items/", data);
       alert("Item logged successfully.");
+
+      // ✅ Save recent item
+      setRecentItem({
+        ...data,
+        _id: res.data._id || Date.now(),  // Use DB ID or fallback
+      });
 
       const matchRes = await api.post("/items/matching", {
         type: formData.item_type,
@@ -185,6 +191,25 @@ export default function AddItemFeature() {
         </Marker>
       )}
 
+      {/* ✅ Render the recently added item with same icon */}
+      {recentItem && (
+        <Marker
+          key={recentItem._id}
+          position={[
+            recentItem.location.coordinates[1],
+            recentItem.location.coordinates[0],
+          ]}
+          icon={mapIcons.markerIcon}  // ✅ Use the same icon as the clickedPosition marker  
+        >
+          <Popup>
+            <strong>{recentItem.item_category}</strong><br />
+            {recentItem.item_description}<br />
+            {new Date(recentItem.item_type.dateReported).toLocaleString()}
+          </Popup>
+        </Marker>
+      )}
+
+      {/* Render matching items */}
       {matchItems.map((item) => (
         <Marker
           key={item._id}
