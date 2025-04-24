@@ -1,20 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from "react";
 import { useSearchParams } from 'react-router-dom';
-import { Marker, Popup, useMap } from 'react-leaflet';
-import { mapIcons } from '../../utils/mapIcons';
-import api from '../../api/axios';
+import { Marker, Popup, useMapEvents, useMap } from "react-leaflet";
+import { mapIcons } from "../../utils/mapIcons";
+import styles from "../../styles/theme.module.css";
+import { findMatchingItems } from "./MatchItems";
+import api from "../../api/axios";
 import ItemCard from '../../pages/Items/ItemCard';
-import { findMatchingItems } from './MatchItems';
 
-export default function ItemZoom() {
+export default function SpecificItemView({ filter }) {
   const [searchParams] = useSearchParams();
   const [selectedItem, setSelectedItem] = useState(null);
   const [matchItems, setMatchItems] = useState([]);
+  const [loading, setLoading] = useState(false);
   const map = useMap();
 
   const itemId = searchParams.get('item');
   const shouldZoom = searchParams.get('zoom') === 'true';
-  const isPreview = searchParams.get('preview') === 'true';
 
   useEffect(() => {
     if (itemId) {
@@ -23,7 +24,6 @@ export default function ItemZoom() {
           const { data } = await api.get(`/items/id/${itemId}`);
           setSelectedItem(data);
           
-																   
           if (data.location && data.location.coordinates) {
             if (shouldZoom) {
               map.setView(
@@ -50,25 +50,30 @@ export default function ItemZoom() {
     }
   }, [itemId, shouldZoom, map]);
 
-  if (!selectedItem || !selectedItem.location) return null;
-
-  const markerIcon = selectedItem.item_type.type === 'lost' 
-    ? mapIcons.lostHighlighted 
-    : mapIcons.foundHighlighted;
-
   return (
     <>
-      <Marker
-        position={[
-          selectedItem.location.coordinates[1],
-          selectedItem.location.coordinates[0]
-        ]}
-        icon={markerIcon}
-      >
-        <Popup maxWidth={300} maxHeight={400}>
-          <ItemCard item={selectedItem} inPopup={true} />
-        </Popup>
-      </Marker>
+      {loading && (
+        <div className={styles.loadingBox}>
+          Finding matches...
+        </div>
+      )}
+      
+      {selectedItem && selectedItem.location && (
+        <Marker
+          position={[
+            selectedItem.location.coordinates[1],
+            selectedItem.location.coordinates[0]
+          ]}
+          icon={selectedItem.item_type.type === 'lost' 
+            ? mapIcons.lostHighlighted 
+            : mapIcons.foundHighlighted}
+        >
+          <Popup maxWidth={300} maxHeight={400}>
+            <ItemCard item={selectedItem} inPopup={true} />
+          </Popup>
+        </Marker>
+      )}
+
       {matchItems.map((item) => (
         <Marker
           key={item._id}
