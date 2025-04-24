@@ -64,7 +64,8 @@ router.get('/by-neighborhood/:shemshchun', verifyToken(), async (req, res) => {
     item_category,
     item_type,
     resolved,
-    keywords
+    keywords,
+    self
   } = req.query;
 
   try {
@@ -83,6 +84,10 @@ router.get('/by-neighborhood/:shemshchun', verifyToken(), async (req, res) => {
 
     if (item_category) {
       query.item_category = item_category;
+    }
+
+    if (self === 'true') {
+      query.owner = req.userId;
     }
 
     if (item_type) {

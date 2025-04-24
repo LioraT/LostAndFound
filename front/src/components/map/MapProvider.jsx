@@ -16,7 +16,8 @@ export default function MapProvider({ children }) {
     item_type: "",
     resolved: "",
     keywords: "",
-    radius: 1500
+    radius: 1500,
+    self: false, // <-- Added "self" here
   });
 
   return (
