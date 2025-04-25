@@ -17,6 +17,12 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup }) => {
     navigate(`/map-tools?item=${item._id}&zoom=true&preview=true`);
   };
 
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(item._id);
+    }
+  };
+
   return (
     <div className={styles.itemCard}>
       <div className={styles.itemImageContainer}>
@@ -91,6 +97,19 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup }) => {
             {new Date(item.item_type.dateReported).toLocaleDateString()}
           </span>
         </div>
+        
+        {isOwner && !inPopup && (
+          <div className={styles.itemFooter}>
+            <div className={styles.itemActions}>
+              <button 
+                className={styles.deleteItem}
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
