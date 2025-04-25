@@ -83,7 +83,7 @@ const MapRadiusSearch = () => {
 
   return (
     <div className={styles.mapWrapper}>
-      {clicked && (
+      {!clicked && (
         <div className={styles.mapHint}>
           🖱️ Click on the map to search lost/found items within 1.5 km
         </div>
