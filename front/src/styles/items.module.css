@@ -326,3 +326,42 @@
     color: white;
     border-color: #1976d2;
 }
+
+.confirmDialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  text-align: center;
+}
+
+.confirmButtons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.confirmButtons button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background: white;
+  font-size: 0.9rem;
+}
+
+.confirmButtons .deleteItem {
+  background-color: #d32f2f;
+  color: white;
+  border-color: #d32f2f;
+}
+
+.confirmButtons button:not(.deleteItem):hover {
+  background-color: #f5f5f5;
+}

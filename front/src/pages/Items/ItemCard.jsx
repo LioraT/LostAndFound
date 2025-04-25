@@ -11,6 +11,7 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup, matchingContext }) => {  /
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [showConfirm, setShowConfirm] = useState(false);  // ✅ Confirmation state
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const highlightedItemId = searchParams.get('item');
   const isHighlighted = item._id === highlightedItemId;
   const markerIcon = item.item_type.type === 'lost' ? mapIcons.lost : mapIcons.found;
@@ -40,6 +41,19 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup, matchingContext }) => {  /
 
   const handleConfirmCancel = () => {
     setShowConfirm(false);
+  };
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    onDelete(item._id);
+    setShowDeleteConfirm(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
   };
 
   return (
@@ -123,7 +137,27 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup, matchingContext }) => {  /
             <button onClick={handleMatchClick} className={styles.matchButton}>Match</button>
           </div>
         )}
+
+        {/* Add delete button if user is owner */}
+        {isOwner && (
+          <div className={styles.itemRow}>
+            <button onClick={handleDeleteClick} className={styles.deleteItem}>
+              Delete
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Add delete confirmation dialog */}
+      {showDeleteConfirm && (
+        <div className={styles.confirmDialog}>
+          <p>Are you sure you want to delete this item?</p>
+          <div className={styles.confirmButtons}>
+            <button onClick={handleDeleteConfirm} className={styles.deleteItem}>Yes</button>
+            <button onClick={handleDeleteCancel}>Cancel</button>
+          </div>
+        </div>
+      )}
 
       {/* ✅ Confirmation Dialog */}
       {showConfirm && (
