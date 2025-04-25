@@ -38,7 +38,7 @@ const createClusterIcon = (type) => {
 };
 
 // Reusable ItemMarkerCluster component
-const ItemMarkerCluster = ({ items, type, selectedItem, onSelectItem }) => (
+const ItemMarkerCluster = ({ items, type, selectedItem, onSelectItem, matchingContext }) => (
   <MarkerClusterGroup
     chunkedLoading
     maxClusterRadius={60}
@@ -60,14 +60,14 @@ const ItemMarkerCluster = ({ items, type, selectedItem, onSelectItem }) => (
         }}
       >
         <Popup maxWidth={300} maxHeight={400}>
-          <ItemCard item={item} inPopup={true} />
+          <ItemCard item={item} inPopup={true} matchingContext={matchingContext} />  {/* ✅ Pass matchingContext */}
         </Popup>
       </Marker>
     ))}
   </MarkerClusterGroup>
 );
 
-export default function ItemClusterGroup({ items }) {
+export default function ItemClusterGroup({ items, matchingContext }) {  // ✅ Add matchingContext
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchParams] = useSearchParams();
   const previewItemId = searchParams.get('item');
@@ -86,12 +86,14 @@ export default function ItemClusterGroup({ items }) {
         type="lost"
         selectedItem={selectedItem}
         onSelectItem={setSelectedItem}
+        matchingContext={matchingContext}  // ✅ Pass matchingContext
       />
       <ItemMarkerCluster 
         items={foundItems}
         type="found"
         selectedItem={selectedItem}
         onSelectItem={setSelectedItem}
+        matchingContext={matchingContext}  // ✅ Pass matchingContext
       />
     </>
   );

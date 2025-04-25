@@ -1,5 +1,7 @@
 // components/map/FeatureManager.jsx
+
 import { useContext, useState } from "react";
+import { useSearchParams } from "react-router-dom";  // ✅ Add this
 import FilterPanel from "../shared/FilterPanel";
 import styles from "../../styles/theme.module.css";
 import { MapContext } from "./MapProvider";
@@ -17,28 +19,27 @@ export default function FeatureManager() {
   } = useContext(MapContext);
   const [filterOpen, setFilterOpen] = useState(false);  // Modal toggle for filter
 
-  const handleModeChange = async (newMode) => {
-    if (mode === newMode) {
-      setMode("");
-      setMode(newMode);
-      setCurrentNeighborhood(null);
-      setNeighborhoodPolygon(null);
-      setDefaultCoordinates(null);
+  const [searchParams, setSearchParams] = useSearchParams();  // ✅ Add this
+  const itemId = searchParams.get('item');   // ✅ Extract itemId
+
+  const handleModeChange = (newMode) => {
+    // Clear itemId first
+    if (searchParams.has('item')) {
+      searchParams.delete('item');
+      setSearchParams(searchParams);
+
+      // Delay setting mode until after URL update
+      setTimeout(() => setMode(newMode), 0);
     } else {
       setMode(newMode);
     }
-    
-    // if (newMode === "neighborhood") {
-    //   const defaultCoords = { lng: 34.7689, lat: 32.0631 };
-    //   try {
-    //     const response = await api.post('/neighborhoods/find-by-coordinates', defaultCoords);
-    //     if (response.data.shemshchun) {
-    //       setDefaultCoordinates(defaultCoords);
-    //     }
-    //   } catch (err) {
-    //     console.error("Error fetching default neighborhood:", err);
-    //   }
-    // }
+
+    // Clear neighborhood-related state if exiting neighborhood
+    if (mode === "neighborhood" && newMode !== "neighborhood") {
+      setCurrentNeighborhood(null);
+      setNeighborhoodPolygon(null);
+      setDefaultCoordinates(null);
+    }
   };
 
   return (
@@ -54,31 +55,39 @@ export default function FeatureManager() {
         </button>
         <button
           className={`${styles.modeButton} ${mode === "radius" ? styles.activeButton : ""}`}
-          onClick={() => setMode("radius")}
+          onClick={() => handleModeChange("radius")}
           title="Radius"
         >
           📍
         </button>
         <button
           className={`${styles.modeButton} ${mode === "heatmap" ? styles.activeButton : ""}`}
-          onClick={() => setMode("heatmap")}
+          onClick={() => handleModeChange("heatmap")}
           title="Heatmap"
         >
           🌡️
         </button>
         <button
           className={`${styles.modeButton} ${mode === "add" ? styles.activeButton : ""}`}
-          onClick={() => setMode("add")}
+          onClick={() => handleModeChange("add")}
           title="Add Item"
         >
           ➕
         </button>
         <button
           className={`${styles.modeButton} ${mode === "police" ? styles.activeButton : ""}`}
-          onClick={() => setMode("police")}
+          onClick={() => handleModeChange("police")}
           title="Police"
         >
           👮
+        </button>
+
+        <button
+          className={`${styles.modeButton} ${mode === "focus" ? styles.activeButton : ""}`}
+          title="Item Focus"
+          disabled  // Makes it non-clickable
+        >
+          🎯
         </button>
 
         {/* Filter Button */}
@@ -90,7 +99,7 @@ export default function FeatureManager() {
         </button>
       </div>
 
-      {/* Filter Popup - positioned near sidebar */}
+      {/* Filter Popup */}
       {filterOpen && (
         <div className={styles.filterPopup}>
           <FilterPanel
