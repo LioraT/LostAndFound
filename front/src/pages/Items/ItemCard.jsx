@@ -19,7 +19,6 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup, matchingContext }) => {  /
     navigate(`/map-tools?item=${item._id}&zoom=true&preview=true`);
   };
 
-
   const handleMatchClick = () => {
     setShowConfirm(true);
   };
@@ -42,14 +41,6 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup, matchingContext }) => {  /
   const handleConfirmCancel = () => {
     setShowConfirm(false);
   };
-
-
-  const handleDelete = () => {
-    if (onDelete) {
-      onDelete(item._id);
-    }
-  };
-
 
   return (
     <div className={styles.itemCard}>
@@ -126,24 +117,10 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup, matchingContext }) => {  /
           </span>
         </div>
 
-
         {/* ✅ Match Button Logic */}
         {matchingContext?.matchingEnabled && item.item_type.resolved === false && (
           <div className={styles.itemRow}>
             <button onClick={handleMatchClick} className={styles.matchButton}>Match</button>
-
-        
-        {isOwner && !inPopup && (
-          <div className={styles.itemFooter}>
-            <div className={styles.itemActions}>
-              <button 
-                className={styles.deleteItem}
-                onClick={handleDelete}
-              >
-                Delete
-              </button>
-            </div>
-
           </div>
         )}
       </div>

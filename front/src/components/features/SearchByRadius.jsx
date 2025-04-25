@@ -57,7 +57,7 @@ export default function SearchByRadius({ filter }) {
     <>
       <MapClickHandler />
 
-      {clicked && (
+      {!clicked && (
         <div className={styles.mapHint}>
           🖱️ Click on the map to search lost/found items within {filter.radius || 1500} meters
         </div>
