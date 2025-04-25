@@ -11,13 +11,9 @@ import Profile from "./user_pages/Profile";
 import ChangePassword from "./user_pages/ChangePassword";
 import EditUser from "./user_pages/EditUser";
 import UserSearch from "./user_pages/UserSearch";
-import MapNeighborhoodSearch from "./pages/MapNeighborhoodSearch";
-import MapRadiusSearch from "./pages/MapRadiusSearch";
-import LostFoundMap from "./pages/LostFoundMap";
 import NotFound from "./base_pages/NotFound";
 
 import MapToolsPage from "./pages/MapToolsPage";
-
 
 function App() {
   return (
@@ -82,32 +78,6 @@ function App() {
             } 
           />
 
-          
-          <Route
-            path="search_neighb"
-            element={
-              <ProtectedRoute>
-                <MapNeighborhoodSearch />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="search_radius"
-            element={
-              <ProtectedRoute>
-                <MapRadiusSearch />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="lostfound_report"
-            element={
-              <ProtectedRoute>
-                <LostFoundMap/>
-              </ProtectedRoute>
-            }
-          />
           <Route
             path="items"
             element={
