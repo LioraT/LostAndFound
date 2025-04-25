@@ -1,4 +1,4 @@
-
+/*theme.module.css*/
 body {
   background-color: #B5E0E7;
   background-image: url('bglnf.png');
@@ -46,13 +46,25 @@ a:hover {
     padding: 1rem;
     border-right: 1px solid #ccc;
     overflow-y: auto;
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+  }
+  
+  .layoutMenu::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
   }
   
   .layoutMain {
     grid-area: main;
     padding: 1.5rem;
     overflow-y: auto;
-    background-color: #B5E0E7
+    background-color: #B5E0E7;
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+  }
+  
+  .layoutMain::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
   }
   
   .layoutFooter {
