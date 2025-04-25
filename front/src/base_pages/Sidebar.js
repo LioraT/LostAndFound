@@ -27,15 +27,6 @@ export default function Sidebar() {
         <span className={styles.sidebarLabel}>Home</span>
       </NavLink>
 
-      <NavLink to="/items"
-        className={({ isActive }) =>
-          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
-        }
-      >
-        <FaList className={styles.sidebarIcon} />
-        <span className={styles.sidebarLabel}>Items List</span>
-      </NavLink>
-
       <NavLink
         to="/about"
         className={({ isActive }) =>
@@ -76,17 +67,15 @@ export default function Sidebar() {
         <span className={styles.sidebarLabel}>Search Users</span>
       </NavLink>
 
-      <NavLink
-        to="/lostfound_report"
+      <NavLink to="/items"
         className={({ isActive }) =>
           isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
         }
       >
-        <FaPlusCircle className={styles.sidebarIcon} />
-        <span className={styles.sidebarLabel}>Add item</span>
+        <FaList className={styles.sidebarIcon} />
+        <span className={styles.sidebarLabel}>Items List</span>
       </NavLink>
 
-      
       <NavLink
         to="/map-tools"
         className={({ isActive }) =>
@@ -97,26 +86,6 @@ export default function Sidebar() {
         <span className={styles.sidebarLabel}>Map Tools</span>
       </NavLink>
 
-
-      <NavLink
-        to="/search_neighb"
-        className={({ isActive }) =>
-          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
-        }
-      >
-        <FaMap className={styles.sidebarIcon} />
-        <span className={styles.sidebarLabel}>neighborhood</span>
-      </NavLink>
-
-     <NavLink
-        to="/search_radius"
-        className={({ isActive }) =>
-          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
-        }
-      >
-        <FaDotCircle className={styles.sidebarIcon} />
-        <span className={styles.sidebarLabel}>radius</span>
-      </NavLink>
     </aside>
   );
 }
