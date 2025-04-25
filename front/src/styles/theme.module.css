@@ -1350,3 +1350,45 @@ a:hover {
   margin-bottom: 0; /* Remove bottom margin for radio labels */
 }
 
+.policeStationPopup {
+  padding: 10px;
+  text-align: center;
+}
+
+.policeStationPopup h3 {
+  margin: 0 0 10px 0;
+  color: #1a237e;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.policeStationPopup .stationName {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.policeStationPopup .directionButton {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.policeStationPopup .directionButton:hover {
+  background-color: #1565c0;
+}
+
+.policeStationPopup .directionButton::before {
+  content: "🗺️";
+}
+
