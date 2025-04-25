@@ -1,17 +1,17 @@
 // components/features/AddItemFeature.jsx
+
 import { useState } from "react";
-import { Marker, Popup, useMapEvents, useMap } from "react-leaflet";
+import { Marker, Popup, useMapEvents } from "react-leaflet";
 import styles from "../../styles/theme.module.css";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../api/axios";
 import { mapIcons } from "../../utils/mapIcons";
+import { useNavigate } from "react-router-dom";  // ✅ Added for redirect
 
 export default function AddItemFeature() {
   const [clickedPosition, setClickedPosition] = useState(null);
-  const [matchItems, setMatchItems] = useState([]);
-  const [recentItem, setRecentItem] = useState(null);  // ✅ Track recently added item
   const { token, user } = useAuth();
-  const map = useMap();
+  const navigate = useNavigate();  // ✅ Initialize navigate
 
   const [formData, setFormData] = useState({
     telephone: "",
@@ -66,32 +66,15 @@ export default function AddItemFeature() {
       const res = await api.post("/items/", data);
       alert("Item logged successfully.");
 
-      // ✅ Save recent item
-      setRecentItem({
-        ...data,
-        _id: res.data._id || Date.now(),  // Use DB ID or fallback
-      });
-
-      const matchRes = await api.post("/items/matching", {
-        type: formData.item_type,
-        category: formData.item_category,
-        coordinates: [clickedPosition.lng, clickedPosition.lat],
-        radius: 1500,
-      });
-
-      setMatchItems(matchRes.data);
-
-      if (matchRes.data.length) {
-        const [lng, lat] = matchRes.data[0].location.coordinates;
-        map.flyTo([lat, lng], 15);
-      }
-
-      setClickedPosition(null);
+      // ✅ Redirect to SearchByItem with new itemId
+      const newItemId = res.data._id;
+      navigate(`/map-tools?item=${newItemId}&zoom=true&preview=true`);
     } catch (err) {
       console.error("Error submitting item:", err);
       alert("Failed to submit item.");
     }
 
+    setClickedPosition(null);
     setFormData({
       telephone: "",
       item_category: "keys",
@@ -172,8 +155,8 @@ export default function AddItemFeature() {
                     onChange={handleChange}
                   />
                   Lost
-                  </label>
-                  <label>
+                </label>
+                <label>
                   <input
                     type="radio"
                     name="item_type"
@@ -182,46 +165,13 @@ export default function AddItemFeature() {
                     onChange={handleChange}
                   />
                   Found
-                  </label>
-                  </div>
-              <button type="submit">submit</button>
+                </label>
+              </div>
+              <button type="submit">Submit</button>
             </form>
           </Popup>
         </Marker>
       )}
-
-      {/* ✅ Render the recently added item with same icon */}
-      {recentItem && (
-        <Marker
-          key={recentItem._id}
-          position={[
-            recentItem.location.coordinates[1],
-            recentItem.location.coordinates[0],
-          ]}
-          icon={mapIcons.markerIcon}  // ✅ Use the same icon as the clickedPosition marker  
-        >
-          <Popup>
-            <strong>{recentItem.item_category}</strong><br />
-            {recentItem.item_description}<br />
-            {new Date(recentItem.item_type.dateReported).toLocaleString()}
-          </Popup>
-        </Marker>
-      )}
-
-      {/* Render matching items */}
-      {matchItems.map((item) => (
-        <Marker
-          key={item._id}
-          position={[item.location.coordinates[1], item.location.coordinates[0]]}
-          icon={mapIcons[item.item_type?.type || "lost"]}
-        >
-          <Popup>
-            <strong>{item.item_category}</strong><br />
-            {item.item_description}<br />
-            {new Date(item.item_type?.dateReported).toLocaleString()}
-          </Popup>
-        </Marker>
-      ))}
     </>
   );
 }

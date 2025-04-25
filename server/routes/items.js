@@ -221,6 +221,37 @@ router.post('/matching', verifyToken(), async (req, res) => {
   }
 });
 
+router.post('/resolved', verifyToken(), async (req, res) => {
+  const { mainItemId, matchedItemId } = req.body;
+
+  if (!mainItemId || !matchedItemId) {
+    return res.status(400).json({ error: "Both mainItemId and matchedItemId are required." });
+  }
+
+  try {
+    const mainItem = await Item.findById(mainItemId);
+    const matchedItem = await Item.findById(matchedItemId);
+
+    if (!mainItem || !matchedItem) {
+      return res.status(404).json({ error: "One or both items not found." });
+    }
+
+    // Set both items as resolved and link them
+    mainItem.item_type.resolved = true;
+    mainItem.item_type.matchedWith = matchedItem._id;
+
+    matchedItem.item_type.resolved = true;
+    matchedItem.item_type.matchedWith = mainItem._id;
+
+    await mainItem.save();
+    await matchedItem.save();
+
+    res.json({ message: "Items matched and resolved successfully." });
+  } catch (err) {
+    console.error("Error resolving items:", err);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
 
 
 module.exports = router;
