@@ -40,8 +40,6 @@ const ItemsList = () => {
     };
 
     const handleDelete = async (itemId) => {
-        if (!window.confirm('Are you sure you want to delete this item?')) return;
-
         try {
             await api.delete(`/items/${itemId}`);
             setItems(items.filter(item => item._id !== itemId));
