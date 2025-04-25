@@ -28,13 +28,32 @@ export default function Sidebar() {
       </NavLink>
 
       <NavLink
-        to="/about"
+        to="/map-tools"
         className={({ isActive }) =>
           isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
         }
       >
-        <FaInfoCircle className={styles.sidebarIcon} />
-        <span className={styles.sidebarLabel}>About</span>
+        <FaMap className={styles.sidebarIcon} />
+        <span className={styles.sidebarLabel}>Map Tools</span>
+      </NavLink>
+
+      <NavLink to="/items"
+        className={({ isActive }) =>
+          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
+        }
+      >
+        <FaList className={styles.sidebarIcon} />
+        <span className={styles.sidebarLabel}>Items List</span>
+      </NavLink>
+
+      <NavLink
+        to="/search_users"
+        className={({ isActive }) =>
+          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
+        }
+      >
+        <FaSearch className={styles.sidebarIcon} />
+        <span className={styles.sidebarLabel}>Search Users</span>
       </NavLink>
 
       <NavLink
@@ -58,33 +77,16 @@ export default function Sidebar() {
       </NavLink>
 
       <NavLink
-        to="/search_users"
+        to="/about"
         className={({ isActive }) =>
           isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
         }
       >
-        <FaSearch className={styles.sidebarIcon} />
-        <span className={styles.sidebarLabel}>Search Users</span>
+        <FaInfoCircle className={styles.sidebarIcon} />
+        <span className={styles.sidebarLabel}>About</span>
       </NavLink>
 
-      <NavLink to="/items"
-        className={({ isActive }) =>
-          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
-        }
-      >
-        <FaList className={styles.sidebarIcon} />
-        <span className={styles.sidebarLabel}>Items List</span>
-      </NavLink>
 
-      <NavLink
-        to="/map-tools"
-        className={({ isActive }) =>
-          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
-        }
-      >
-        <FaMap className={styles.sidebarIcon} />
-        <span className={styles.sidebarLabel}>Map Tools</span>
-      </NavLink>
 
     </aside>
   );

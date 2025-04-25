@@ -51,10 +51,8 @@ export default function SearchByPoliceStations() {
         >
           <Popup>
             <div className={styles.policeStationPopup}>
-              <h3>Police</h3>
-              <p><strong>משטרה</strong> {station.properties.name} </p>
-              {station.phone && <p><strong>Phone:</strong> {station.phone}</p>}
-              {station.district && <p><strong>District:</strong> {station.district}</p>}
+              <h3>Police Station</h3>
+              <p className={styles.stationName}>{station.properties.name}</p>
               <button 
                 className={styles.directionButton}
                 onClick={() => {
