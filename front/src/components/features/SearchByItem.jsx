@@ -18,6 +18,11 @@ export default function SearchByItem({ itemId, radius }) {
   const { user } = useAuth();
   const map = useMap();
   const { mode } = useContext(MapContext);
+  const [refreshFlag, setRefreshFlag] = useState(0);
+
+  const refreshSearch = () => {
+    setRefreshFlag(prev => prev + 1);  // Increment to trigger refresh
+  };
 
   useEffect(() => {
     if (mode !== "focus") return;
@@ -52,7 +57,7 @@ export default function SearchByItem({ itemId, radius }) {
     if (itemId && radius) {
       fetchItemAndMatches();
     }
-  }, [itemId, radius, mode, map]);
+  }, [itemId, radius, mode, map, refreshFlag ]);
 
   const renderStatusButton = () => (
     <div className={styles.statusButtonActive}>
@@ -94,7 +99,8 @@ export default function SearchByItem({ itemId, radius }) {
           matchingEnabled:
             item.item_type.type === "found" &&
             item.owner._id === user._id &&
-            !item.item_type.resolved
+            !item.item_type.resolved,
+          onRefresh: refreshSearch  // always include
         }}
       />
     </>
