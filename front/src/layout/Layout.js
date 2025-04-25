@@ -22,8 +22,8 @@ export default function Layout() {
       <footer className={styles.layoutFooter}>
         <div className={styles.footerContent}>
           <div className={styles.footerQuote}>
-            <h2>“Here’s to alcohol: the cause of, and solution to, all of life’s problems.”</h2>
-            <h3>Homer Simpson</h3>
+            <h2>“Out of all the things I have lost, I miss my mind the most.”</h2>
+            <h3>Mark Twain</h3>
           </div>
         </div>
       </footer>
