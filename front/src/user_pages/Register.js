@@ -32,7 +32,7 @@ export default function Register() {
     });
 
     if (result.success) {
-      navigate("/about");
+      navigate("/");
     } else {
       setError(result.error || "Registration failed");
     }
