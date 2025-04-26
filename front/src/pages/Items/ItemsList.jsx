@@ -15,6 +15,7 @@ const ItemsList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 12;
+    const [showResolved, setShowResolved] = useState(false);
 
     useEffect(() => {
         fetchItems();
@@ -50,6 +51,9 @@ const ItemsList = () => {
 
     // Filter items based on search term
     const filteredItems = items.filter(item => {
+        // Hide resolved items unless the box is checked
+        if (!showResolved && item.item_type.resolved) return false;
+
         const searchTermLower = searchTerm.toLowerCase();
         return (
             // Search by title
@@ -87,7 +91,15 @@ const ItemsList = () => {
                             className={styles.searchInput}
                         />
                     </div>
-
+                    <label className={styles.showResolvedLabel}>
+                        <input
+                            type="checkbox"
+                            checked={showResolved}
+                            onChange={e => setShowResolved(e.target.checked)}
+                            className={styles.showResolvedCheckbox}
+                        />
+                        Show resolved
+                    </label>
                 </div>
             </div>
 
@@ -95,6 +107,7 @@ const ItemsList = () => {
                 {currentItems.map(item => {
                     console.log('Current item:', item);
                     console.log('User:', user);
+                    if (!showResolved && item.item_type.resolved) return null;
                     return (
                         <ItemCard 
                             key={item._id}
