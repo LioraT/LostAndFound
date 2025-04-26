@@ -8,7 +8,7 @@
  const protectedRoute = require('./routes/protectedRoute');
  const itemsRoutes = require('./routes/items');
  const neighborhoods = require('./routes/neighborhoods');
- const policestations = require('./routes/policeStations');
+ const policestations = require('./routes/policestations');
  const devRoutes = require('./routes/devRoute');
  app.use(cors());
  app.use(express.json());

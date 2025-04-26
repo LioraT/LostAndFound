@@ -63,6 +63,11 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup, matchingContext }) => {  /
         <div className={`${styles.itemType} ${styles[item.item_type.type]}`}>
           {item.item_type.type.toUpperCase()}
         </div>
+        {item.item_type.resolved && (
+          <div className={styles.resolvedStatus}>
+            RESOLVED
+          </div>
+        )}
         {item.location && item.location.coordinates && (
           <div 
             className={styles.mapPreviewContainer}
