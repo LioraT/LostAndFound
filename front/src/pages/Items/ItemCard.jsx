@@ -36,6 +36,7 @@ const ItemCard = ({ item, onDelete, isOwner, inPopup, matchingContext }) => {  /
     } catch (err) {
       console.error("Matching error:", err);
       alert("Failed to match items.");
+      matchingContext.onRefresh();  // 🔥 Refresh!
       setShowConfirm(false);
     }
   };

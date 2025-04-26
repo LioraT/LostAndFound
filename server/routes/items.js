@@ -226,38 +226,52 @@ router.post('/matching', verifyToken(), async (req, res) => {
   }
 });
 
-
 router.post('/resolved', verifyToken(), async (req, res) => {
   const { mainItemId, matchedItemId } = req.body;
 
   if (!mainItemId || !matchedItemId) {
-    return res.status(400).json({ error: "Both mainItemId and matchedItemId are required." });
+    return res.status(400).json({ error: 'Both mainItemId and matchedItemId are required.' });
   }
 
   try {
-    const mainItem = await Item.findById(mainItemId);
-    const matchedItem = await Item.findById(matchedItemId);
+    // Fetch both items
+    const [mainItem, matchedItem] = await Promise.all([
+      Item.findById(mainItemId),
+      Item.findById(matchedItemId)
+    ]);
 
+    // Validate existence
     if (!mainItem || !matchedItem) {
-      return res.status(404).json({ error: "One or both items not found." });
+      return res.status(404).json({ error: 'One or both items not found.' });
     }
 
-    // Set both items as resolved and link them
+    // Check if either is already resolved
+    if (mainItem.item_type.resolved) {
+      return res.status(400).json({ error: `Main item ${mainItemId} is already resolved.` });
+    }
+    if (matchedItem.item_type.resolved) {
+      return res.status(400).json({ error: `Matched item ${matchedItemId} is already resolved.` });
+    }
+
+    // Proceed to resolve both items
     mainItem.item_type.resolved = true;
-    mainItem.item_type.matchedWith = matchedItem._id;
+    mainItem.item_type.matchedWith = matchedItemId;
 
     matchedItem.item_type.resolved = true;
-    matchedItem.item_type.matchedWith = mainItem._id;
+    matchedItem.item_type.matchedWith = mainItemId;
 
-    await mainItem.save();
-    await matchedItem.save();
+    // Save both items
+    await Promise.all([
+      mainItem.save(),
+      matchedItem.save()
+    ]);
 
-    res.json({ message: "Items matched and resolved successfully." });
-  } catch (err) {
-    console.error("Error resolving items:", err);
-    res.status(500).json({ error: "Internal server error." });
+    res.status(200).json({ message: 'Items resolved successfully.' });
+
+  } catch (error) {
+    console.error('Error resolving items:', error);
+    res.status(500).json({ error: 'Server error while resolving items.' });
   }
 });
-
 
 module.exports = router;
