@@ -13,8 +13,11 @@ import {
   FaDotCircle
 } from "react-icons/fa";
 import styles from "../styles/theme.module.css";
+import { useAuth } from "../context/AuthContext";
 
 export default function Sidebar() {
+  const { user } = useAuth();
+
   return (
     <aside className={styles.sidebar}>
       <NavLink
@@ -46,15 +49,17 @@ export default function Sidebar() {
         <span className={styles.sidebarLabel}>Items List</span>
       </NavLink>
 
-      <NavLink
-        to="/search_users"
-        className={({ isActive }) =>
-          isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
-        }
-      >
-        <FaSearch className={styles.sidebarIcon} />
-        <span className={styles.sidebarLabel}>Search Users</span>
-      </NavLink>
+      {user?.is_admin && (
+        <NavLink
+          to="/search_users"
+          className={({ isActive }) =>
+            isActive ? `${styles.sidebarLink} ${styles.sidebarLinkActive}` : styles.sidebarLink
+          }
+        >
+          <FaSearch className={styles.sidebarIcon} />
+          <span className={styles.sidebarLabel}>Search Users</span>
+        </NavLink>
+      )}
 
       <NavLink
         to="/profile"
