@@ -19,7 +19,7 @@ export default function Login() {
     const result = await signin(username, password);
   
     if (result.success) {
-      navigate("/about");
+      navigate("/");
     } else {
       setError(result.error || "Login failed");
     }
