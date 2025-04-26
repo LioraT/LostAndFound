@@ -583,8 +583,9 @@ a:hover {
   .mapMessage {
     position: absolute;
     top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 30px;
+    left: auto;
+    transform: none;
     background-color: white;
     padding: 10px 20px;
     border-radius: 8px;
@@ -608,9 +609,10 @@ a:hover {
 
   .mapHint {
     position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 25px;
+    right: 30px;
+    left: auto;
+    transform: none;
     background-color: white;
     padding: 10px 20px;
     border-radius: 8px;
