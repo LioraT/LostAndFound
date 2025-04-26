@@ -41,7 +41,11 @@ export default function MainMap() {
       />
 
       {mode === "focus" && itemId ? (
-        <SearchByItem itemId={itemId} radius={radius} />
+        <SearchByItem
+          itemId={itemId}
+          radius={radius}
+          matchingResolved={filterOptions?.matchingResolved || ''}  // 🔥 Pass matchingResolved
+        />
       ) : (
         <>
           {!mode && <AllItemsView />}
@@ -52,6 +56,7 @@ export default function MainMap() {
           {mode === "police" && <PoliceStations />}
         </>
       )}
+
     </MapContainer>
   );
 }

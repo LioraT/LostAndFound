@@ -11,7 +11,7 @@ import ItemCard from "../../pages/Items/ItemCard";
 import { findMatchingItems } from "./MatchItems";
 import ItemClusterGroup from "./ItemClusterGroup";  // ✅ Added import
 
-export default function SearchByItem({ itemId, radius }) {
+export default function SearchByItem({ itemId, radius, matchingResolved }) {  // 🔥 Added matchingResolved prop
   const [item, setItem] = useState(null);
   const [matchItems, setMatchItems] = useState([]);
   const [error, setError] = useState(null);
@@ -35,7 +35,6 @@ export default function SearchByItem({ itemId, radius }) {
         console.log("Current user:", user?._id);
         console.log("got data: ", data);
 
-
         if (data.location && data.location.coordinates) {
           const [lng, lat] = data.location.coordinates;
           map.flyTo([lat, lng], 14);
@@ -44,7 +43,8 @@ export default function SearchByItem({ itemId, radius }) {
             type: data.item_type.type,
             category: data.item_category,
             coordinates: data.location.coordinates,
-            radius: radius
+            radius: radius,
+            resolved: matchingResolved !== '' ? matchingResolved : undefined  // 🔥 Pass matchingResolved
           });
           setMatchItems(matches);
         }
@@ -57,7 +57,7 @@ export default function SearchByItem({ itemId, radius }) {
     if (itemId && radius) {
       fetchItemAndMatches();
     }
-  }, [itemId, radius, mode, map, refreshFlag ]);
+  }, [itemId, radius, matchingResolved, mode, map, refreshFlag ]);  // 🔥 Add matchingResolved to deps
 
   const renderStatusButton = () => (
     <div className={styles.statusButtonActive}>
