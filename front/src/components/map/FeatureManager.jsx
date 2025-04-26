@@ -8,11 +8,11 @@ import { MapContext } from "./MapProvider";
 import api from "../../api/axios";
 
 export default function FeatureManager() {
-  const { 
-    mode, 
-    setMode, 
-    filterOptions, 
-    setFilterOptions, 
+  const {
+    mode,
+    setMode,
+    filterOptions,
+    setFilterOptions,
     setDefaultCoordinates,
     setCurrentNeighborhood,
     setNeighborhoodPolygon
@@ -105,7 +105,9 @@ export default function FeatureManager() {
           <FilterPanel
             filter={filterOptions}
             onChange={setFilterOptions}
-            showRadius={mode === "radius" || mode === "add"}
+            showLocationBased={mode !== "add" && mode !== "focus"}
+            showRadius={mode === "radius" || mode === "add" || mode ==="focus"}
+            showMatchingResolved={mode === "add" || mode ==="focus"}
           />
           <button className={styles.modalClose} onClick={() => setFilterOpen(false)}>❌ Close</button>
         </div>

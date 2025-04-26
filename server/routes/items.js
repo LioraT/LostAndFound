@@ -189,20 +189,18 @@ router.get('/nearby', verifyToken(), async (req, res) => {
 //
 // POST /items/matching
 router.post('/matching', verifyToken(), async (req, res) => {
-  const { type, category, coordinates, radius } = req.body;
+  const { type, category, coordinates, radius, resolved } = req.body;
 
   if (!type || !category || !coordinates) {
     return res.status(400).json({ error: "Missing required fields." });
   }
-  //console.log("in post !!!");
 
   const oppositeType = type === 'lost' ? 'found' : 'lost';
-  //console.log("in post !!!",type, oppositeType, category, coordinates, radius );
+
   try {
-    const matches = await Item.find({
+    const query = {
       "item_type.type": oppositeType,
       item_category: category,
-   //   resolved: false,
       location: {
         $near: {
           $geometry: {
@@ -212,14 +210,22 @@ router.post('/matching', verifyToken(), async (req, res) => {
           $maxDistance: radius || 1500
         }
       }
-    });
-    //console.log("after find !!!",matches );
+    };
+
+    // 🔥 Only add resolved filter if provided
+    if (resolved !== undefined) {
+      query["item_type.resolved"] = resolved === "true";  // Convert string to boolean
+    }
+    // Else: do nothing (both resolved & unresolved will be included)
+
+    const matches = await Item.find(query);
     res.json(matches);
   } catch (err) {
     console.error("Error in /items/matching:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
+
 
 router.post('/resolved', verifyToken(), async (req, res) => {
   const { mainItemId, matchedItemId } = req.body;
