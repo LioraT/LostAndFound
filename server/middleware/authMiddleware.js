@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const debug = require('../utils/debug');
+const { hebrewUrl } = require('../utils/hebrewUtils');
 const verifyToken = () => {
     // Only captured once at route-definition time
     const stack = new Error().stack?.split('\n') || [];
@@ -20,7 +21,7 @@ const verifyToken = () => {
     // debug.log ("verifyToken registred from: ", definedAt);
     return (req, res, next) => {
         if (process.env.DEBUG_MODE === 'true') {
-	        const origUrl = debug.heburl(req.originalUrl);
+	        const origUrl = hebrewUrl(req.originalUrl);
             debug.log(`🔐 [${req.method} ${origUrl}] route defined at ${definedAt}`);
         }
         const token = req.header('Authorization');
