@@ -12,7 +12,7 @@ export default function EditUser() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   
-  const { token } = useAuth();
+  const { token, user: currentUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,6 +30,11 @@ export default function EditUser() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    
+    if (name === "is_admin" && id === currentUser?._id) {
+      return;
+    }
+    
     setUser({
       ...user,
       [name]: type === "checkbox" ? checked : value,
@@ -65,6 +70,8 @@ export default function EditUser() {
   if (error && !user) return <p className={styles.editUserError}>{error}</p>;
   if (!user) return <p>Loading...</p>;
 
+  const isOwnProfile = id === currentUser?._id;
+
   return (
     <div className={styles.editUserContainer}>
       <h2>Edit User</h2>
@@ -98,23 +105,27 @@ export default function EditUser() {
           placeholder="Family Name"
           className={styles.editUserInput}
         />
-        <label>
-          <input
-            type="checkbox"
-            name="is_admin"
-            checked={user.is_admin}
-            onChange={handleChange}
-          />
-          Admin
-        </label>
+        {!isOwnProfile && (
+          <label>
+            <input
+              type="checkbox"
+              name="is_admin"
+              checked={user.is_admin}
+              onChange={handleChange}
+            />
+            Admin
+          </label>
+        )}
         <button type="submit" className={styles.editUserButton}>Update User</button>
-        <button
-          onClick={handleDelete}
-          type="button"
-          className={styles.editUserDeleteButton}
-        >
-          Delete User
-        </button>
+        {!isOwnProfile && (
+          <button
+            onClick={handleDelete}
+            type="button"
+            className={styles.editUserDeleteButton}
+          >
+            Delete User
+          </button>
+        )}
         {message && <p className={styles.editUserSuccess}>{message}</p>}
         {error && <p className={styles.editUserError}>{error}</p>}
       </form>

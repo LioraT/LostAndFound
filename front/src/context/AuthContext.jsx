@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
         try {
           // This is an async operation - fetches user profile from server
           const { data } = await api.get('/protected/profile');
-          setUser({ username: savedUsername, _id: data._id });
+          setUser({ username: savedUsername, _id: data._id, is_admin: data.is_admin });
         } catch (err) {
           console.error('Error fetching user profile:', err);
           handleSignOut(); // Sign out if profile fetch fails
@@ -64,7 +64,11 @@ export const AuthProvider = ({ children }) => {
       
       // Store complete user data
       setToken(data.token);
-      setUser({username: userData.username, _id: userData._id });
+      setUser({
+        username: userData.username, 
+        _id: userData._id,
+        is_admin: userData.is_admin
+      });
       
       localStorage.setItem("username", userData.username);
       
