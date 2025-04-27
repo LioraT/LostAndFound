@@ -8,11 +8,9 @@ node_modules/
 .DS_Store
 
 # json
-package.json
 package-lock.json
 
 # Environment variables
-.env
 .env.local
 .env.*.local
 
