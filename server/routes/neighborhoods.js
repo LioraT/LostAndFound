@@ -40,9 +40,9 @@ router.post("/find-by-coordinates",verifyToken(), async (req, res) => {
   }
 });
 
-// GET /neighborhoods/by-name/:shemshchun = Get items within neighborhood polygon
+// GET /neighborhoods/by-name/:shemshchun = Get polygon
 router.get('/by-name/:shemshchun', verifyToken(), async (req, res) => {
-  const { shemshchun } = req.params;
+  const { shemshchun } = req.params; // destructuring
 
   try {
     const neighborhood = await Neighborhood.findOne({ "properties.shemshchun": shemshchun });
@@ -60,7 +60,7 @@ router.get('/by-name/:shemshchun', verifyToken(), async (req, res) => {
 
 // Get items within neighborhood polygon (with filters)
 router.get('/by-neighborhood/:shemshchun', verifyToken(), async (req, res) => {
-  const { shemshchun } = req.params;
+  const { shemshchun } = req.params; // destructuring
   const {
     item_category,
     item_type,
